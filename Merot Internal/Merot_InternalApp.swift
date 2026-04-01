@@ -1,6 +1,6 @@
 //
-//  MEROT_HRSApp.swift
-//  MEROT HRS
+//  Merot_InternalApp.swift
+//  Merot Internal
 //
 //  Created by Meriton Chutra on 7/14/25.
 //
@@ -8,7 +8,7 @@
 import SwiftUI
 
 @main
-struct MEROT_HRSApp: App {
+struct Merot_InternalApp: App {
     var body: some Scene {
         WindowGroup {
             ContentView()

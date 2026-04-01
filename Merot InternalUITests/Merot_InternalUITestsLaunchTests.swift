@@ -1,13 +1,13 @@
 //
-//  MEROT_HRSUITestsLaunchTests.swift
-//  MEROT HRSUITests
+//  Merot_InternalUITestsLaunchTests.swift
+//  Merot InternalUITests
 //
 //  Created by Meriton Chutra on 7/14/25.
 //
 
 import XCTest
 
-final class MEROT_HRSUITestsLaunchTests: XCTestCase {
+final class Merot_InternalUITestsLaunchTests: XCTestCase {
 
     override class var runsForEachTargetApplicationUIConfiguration: Bool {
         true

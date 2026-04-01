@@ -340,9 +340,9 @@ struct DataExportView: View {
         // For PDF, we'll return HTML content that could be converted to PDF
         var htmlContent = """
         <html>
-        <head><title>MEROT HRS Data Export</title></head>
+        <head><title>Merot Internal Data Export</title></head>
         <body>
-        <h1>MEROT HRS Data Export</h1>
+        <h1>Merot Internal Data Export</h1>
         <p>Export Date: \(Date())</p>
         <p>Date Range: \(dateRange.rawValue)</p>
         """

@@ -1,6 +1,6 @@
 //
 //  SplashScreenView.swift
-//  MEROT HRS
+//  Merot Internal
 //
 //  Created by Claude on 8/5/25.
 //

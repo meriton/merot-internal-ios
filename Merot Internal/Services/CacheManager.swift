@@ -33,7 +33,7 @@ class CacheManager {
     private init() {
         // Create cache directory
         let urls = fileManager.urls(for: .cachesDirectory, in: .userDomainMask)
-        cacheDirectory = urls[0].appendingPathComponent("MerotHRSCache")
+        cacheDirectory = urls[0].appendingPathComponent("MerotInternalCache")
         
         if !fileManager.fileExists(atPath: cacheDirectory.path) {
             try? fileManager.createDirectory(at: cacheDirectory, withIntermediateDirectories: true)

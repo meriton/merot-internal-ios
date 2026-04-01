@@ -1,6 +1,6 @@
 //
 //  ContentView.swift
-//  MEROT HRS
+//  Merot Internal
 //
 //  Created by Meriton Chutra on 7/14/25.
 //

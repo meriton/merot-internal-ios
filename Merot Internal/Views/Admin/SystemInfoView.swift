@@ -99,7 +99,7 @@ struct SystemInfoView: View {
     
     private func copySystemInfoToClipboard() {
         let systemInfo = """
-        MEROT HRS System Information
+        Merot Internal System Information
         
         Application:
         - Version: \(Bundle.main.infoDictionary?["CFBundleShortVersionString"] as? String ?? "Unknown")

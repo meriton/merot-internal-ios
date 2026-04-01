@@ -8,10 +8,10 @@ class NetworkManager: ObservableObject {
         #if targetEnvironment(simulator)
         return "http://localhost:3000/api"  // Simulator can reach localhost
         #else
-        return "https://hrs.merot.com/api"  // Real device needs production URL
+        return "https://internal.merot.com/api"  // Real device needs production URL
         #endif
         #else
-        return "https://hrs.merot.com/api"  // Release builds always use production
+        return "https://internal.merot.com/api"  // Release builds always use production
         #endif
     }
     

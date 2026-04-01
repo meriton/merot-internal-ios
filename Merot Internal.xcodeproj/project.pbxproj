@@ -12,37 +12,37 @@
 			containerPortal = A2EFA6142E256BBC0017A5B7 /* Project object */;
 			proxyType = 1;
 			remoteGlobalIDString = A2EFA61B2E256BBC0017A5B7;
-			remoteInfo = "MEROT HRS";
+			remoteInfo = "Merot Internal";
 		};
 		A2EFA6352E256BBE0017A5B7 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = A2EFA6142E256BBC0017A5B7 /* Project object */;
 			proxyType = 1;
 			remoteGlobalIDString = A2EFA61B2E256BBC0017A5B7;
-			remoteInfo = "MEROT HRS";
+			remoteInfo = "Merot Internal";
 		};
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
 		A2EFA61C2E256BBC0017A5B7 /* Merot HRS.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Merot HRS.app"; sourceTree = BUILT_PRODUCTS_DIR; };
-		A2EFA62A2E256BBD0017A5B7 /* MEROT HRSTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "MEROT HRSTests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
-		A2EFA6342E256BBE0017A5B7 /* MEROT HRSUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "MEROT HRSUITests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
+		A2EFA62A2E256BBD0017A5B7 /* Merot InternalTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "Merot InternalTests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
+		A2EFA6342E256BBE0017A5B7 /* Merot InternalUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "Merot InternalUITests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
-		A2EFA61E2E256BBC0017A5B7 /* MEROT HRS */ = {
+		A2EFA61E2E256BBC0017A5B7 /* Merot Internal */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
-			path = "MEROT HRS";
+			path = "Merot Internal";
 			sourceTree = "<group>";
 		};
-		A2EFA62D2E256BBD0017A5B7 /* MEROT HRSTests */ = {
+		A2EFA62D2E256BBD0017A5B7 /* Merot InternalTests */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
-			path = "MEROT HRSTests";
+			path = "Merot InternalTests";
 			sourceTree = "<group>";
 		};
-		A2EFA6372E256BBE0017A5B7 /* MEROT HRSUITests */ = {
+		A2EFA6372E256BBE0017A5B7 /* Merot InternalUITests */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
-			path = "MEROT HRSUITests";
+			path = "Merot InternalUITests";
 			sourceTree = "<group>";
 		};
 /* End PBXFileSystemSynchronizedRootGroup section */
@@ -75,9 +75,9 @@
 		A2EFA6132E256BBC0017A5B7 = {
 			isa = PBXGroup;
 			children = (
-				A2EFA61E2E256BBC0017A5B7 /* MEROT HRS */,
-				A2EFA62D2E256BBD0017A5B7 /* MEROT HRSTests */,
-				A2EFA6372E256BBE0017A5B7 /* MEROT HRSUITests */,
+				A2EFA61E2E256BBC0017A5B7 /* Merot Internal */,
+				A2EFA62D2E256BBD0017A5B7 /* Merot InternalTests */,
+				A2EFA6372E256BBE0017A5B7 /* Merot InternalUITests */,
 				A2EFA61D2E256BBC0017A5B7 /* Products */,
 			);
 			sourceTree = "<group>";
@@ -86,8 +86,8 @@
 			isa = PBXGroup;
 			children = (
 				A2EFA61C2E256BBC0017A5B7 /* Merot HRS.app */,
-				A2EFA62A2E256BBD0017A5B7 /* MEROT HRSTests.xctest */,
-				A2EFA6342E256BBE0017A5B7 /* MEROT HRSUITests.xctest */,
+				A2EFA62A2E256BBD0017A5B7 /* Merot InternalTests.xctest */,
+				A2EFA6342E256BBE0017A5B7 /* Merot InternalUITests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -95,9 +95,9 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
-		A2EFA61B2E256BBC0017A5B7 /* MEROT HRS */ = {
+		A2EFA61B2E256BBC0017A5B7 /* Merot Internal */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = A2EFA63E2E256BBE0017A5B7 /* Build configuration list for PBXNativeTarget "MEROT HRS" */;
+			buildConfigurationList = A2EFA63E2E256BBE0017A5B7 /* Build configuration list for PBXNativeTarget "Merot Internal" */;
 			buildPhases = (
 				A2EFA6182E256BBC0017A5B7 /* Sources */,
 				A2EFA6192E256BBC0017A5B7 /* Frameworks */,
@@ -108,18 +108,18 @@
 			dependencies = (
 			);
 			fileSystemSynchronizedGroups = (
-				A2EFA61E2E256BBC0017A5B7 /* MEROT HRS */,
+				A2EFA61E2E256BBC0017A5B7 /* Merot Internal */,
 			);
-			name = "MEROT HRS";
+			name = "Merot Internal";
 			packageProductDependencies = (
 			);
-			productName = "MEROT HRS";
+			productName = "Merot Internal";
 			productReference = A2EFA61C2E256BBC0017A5B7 /* Merot HRS.app */;
 			productType = "com.apple.product-type.application";
 		};
-		A2EFA6292E256BBD0017A5B7 /* MEROT HRSTests */ = {
+		A2EFA6292E256BBD0017A5B7 /* Merot InternalTests */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = A2EFA6412E256BBE0017A5B7 /* Build configuration list for PBXNativeTarget "MEROT HRSTests" */;
+			buildConfigurationList = A2EFA6412E256BBE0017A5B7 /* Build configuration list for PBXNativeTarget "Merot InternalTests" */;
 			buildPhases = (
 				A2EFA6262E256BBD0017A5B7 /* Sources */,
 				A2EFA6272E256BBD0017A5B7 /* Frameworks */,
@@ -131,18 +131,18 @@
 				A2EFA62C2E256BBD0017A5B7 /* PBXTargetDependency */,
 			);
 			fileSystemSynchronizedGroups = (
-				A2EFA62D2E256BBD0017A5B7 /* MEROT HRSTests */,
+				A2EFA62D2E256BBD0017A5B7 /* Merot InternalTests */,
 			);
-			name = "MEROT HRSTests";
+			name = "Merot InternalTests";
 			packageProductDependencies = (
 			);
-			productName = "MEROT HRSTests";
-			productReference = A2EFA62A2E256BBD0017A5B7 /* MEROT HRSTests.xctest */;
+			productName = "Merot InternalTests";
+			productReference = A2EFA62A2E256BBD0017A5B7 /* Merot InternalTests.xctest */;
 			productType = "com.apple.product-type.bundle.unit-test";
 		};
-		A2EFA6332E256BBE0017A5B7 /* MEROT HRSUITests */ = {
+		A2EFA6332E256BBE0017A5B7 /* Merot InternalUITests */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = A2EFA6442E256BBE0017A5B7 /* Build configuration list for PBXNativeTarget "MEROT HRSUITests" */;
+			buildConfigurationList = A2EFA6442E256BBE0017A5B7 /* Build configuration list for PBXNativeTarget "Merot InternalUITests" */;
 			buildPhases = (
 				A2EFA6302E256BBE0017A5B7 /* Sources */,
 				A2EFA6312E256BBE0017A5B7 /* Frameworks */,
@@ -154,13 +154,13 @@
 				A2EFA6362E256BBE0017A5B7 /* PBXTargetDependency */,
 			);
 			fileSystemSynchronizedGroups = (
-				A2EFA6372E256BBE0017A5B7 /* MEROT HRSUITests */,
+				A2EFA6372E256BBE0017A5B7 /* Merot InternalUITests */,
 			);
-			name = "MEROT HRSUITests";
+			name = "Merot InternalUITests";
 			packageProductDependencies = (
 			);
-			productName = "MEROT HRSUITests";
-			productReference = A2EFA6342E256BBE0017A5B7 /* MEROT HRSUITests.xctest */;
+			productName = "Merot InternalUITests";
+			productReference = A2EFA6342E256BBE0017A5B7 /* Merot InternalUITests.xctest */;
 			productType = "com.apple.product-type.bundle.ui-testing";
 		};
 /* End PBXNativeTarget section */
@@ -186,7 +186,7 @@
 					};
 				};
 			};
-			buildConfigurationList = A2EFA6172E256BBC0017A5B7 /* Build configuration list for PBXProject "MEROT HRS" */;
+			buildConfigurationList = A2EFA6172E256BBC0017A5B7 /* Build configuration list for PBXProject "Merot Internal" */;
 			developmentRegion = en;
 			hasScannedForEncodings = 0;
 			knownRegions = (
@@ -200,9 +200,9 @@
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
-				A2EFA61B2E256BBC0017A5B7 /* MEROT HRS */,
-				A2EFA6292E256BBD0017A5B7 /* MEROT HRSTests */,
-				A2EFA6332E256BBE0017A5B7 /* MEROT HRSUITests */,
+				A2EFA61B2E256BBC0017A5B7 /* Merot Internal */,
+				A2EFA6292E256BBD0017A5B7 /* Merot InternalTests */,
+				A2EFA6332E256BBE0017A5B7 /* Merot InternalUITests */,
 			);
 		};
 /* End PBXProject section */
@@ -258,12 +258,12 @@
 /* Begin PBXTargetDependency section */
 		A2EFA62C2E256BBD0017A5B7 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
-			target = A2EFA61B2E256BBC0017A5B7 /* MEROT HRS */;
+			target = A2EFA61B2E256BBC0017A5B7 /* Merot Internal */;
 			targetProxy = A2EFA62B2E256BBD0017A5B7 /* PBXContainerItemProxy */;
 		};
 		A2EFA6362E256BBE0017A5B7 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
-			target = A2EFA61B2E256BBC0017A5B7 /* MEROT HRS */;
+			target = A2EFA61B2E256BBC0017A5B7 /* Merot Internal */;
 			targetProxy = A2EFA6352E256BBE0017A5B7 /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
@@ -388,7 +388,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
-				CODE_SIGN_ENTITLEMENTS = "MEROT HRS/MEROT_HRS.entitlements";
+				CODE_SIGN_ENTITLEMENTS = "Merot Internal/Merot_Internal.entitlements";
 				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
@@ -428,7 +428,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
-				CODE_SIGN_ENTITLEMENTS = "MEROT HRS/MEROT_HRS.entitlements";
+				CODE_SIGN_ENTITLEMENTS = "Merot Internal/Merot_Internal.entitlements";
 				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
@@ -480,7 +480,7 @@
 				SWIFT_EMIT_LOC_STRINGS = NO;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2,7";
-				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/MEROT HRS.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/MEROT HRS";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Merot Internal.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/Merot Internal";
 				XROS_DEPLOYMENT_TARGET = 2.5;
 			};
 			name = Debug;
@@ -502,7 +502,7 @@
 				SWIFT_EMIT_LOC_STRINGS = NO;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2,7";
-				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/MEROT HRS.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/MEROT HRS";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Merot Internal.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/Merot Internal";
 				XROS_DEPLOYMENT_TARGET = 2.5;
 			};
 			name = Release;
@@ -523,7 +523,7 @@
 				SWIFT_EMIT_LOC_STRINGS = NO;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2,7";
-				TEST_TARGET_NAME = "MEROT HRS";
+				TEST_TARGET_NAME = "Merot Internal";
 				XROS_DEPLOYMENT_TARGET = 2.5;
 			};
 			name = Debug;
@@ -544,7 +544,7 @@
 				SWIFT_EMIT_LOC_STRINGS = NO;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2,7";
-				TEST_TARGET_NAME = "MEROT HRS";
+				TEST_TARGET_NAME = "Merot Internal";
 				XROS_DEPLOYMENT_TARGET = 2.5;
 			};
 			name = Release;
@@ -552,7 +552,7 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		A2EFA6172E256BBC0017A5B7 /* Build configuration list for PBXProject "MEROT HRS" */ = {
+		A2EFA6172E256BBC0017A5B7 /* Build configuration list for PBXProject "Merot Internal" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				A2EFA63C2E256BBE0017A5B7 /* Debug */,
@@ -561,7 +561,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		A2EFA63E2E256BBE0017A5B7 /* Build configuration list for PBXNativeTarget "MEROT HRS" */ = {
+		A2EFA63E2E256BBE0017A5B7 /* Build configuration list for PBXNativeTarget "Merot Internal" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				A2EFA63F2E256BBE0017A5B7 /* Debug */,
@@ -570,7 +570,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		A2EFA6412E256BBE0017A5B7 /* Build configuration list for PBXNativeTarget "MEROT HRSTests" */ = {
+		A2EFA6412E256BBE0017A5B7 /* Build configuration list for PBXNativeTarget "Merot InternalTests" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				A2EFA6422E256BBE0017A5B7 /* Debug */,
@@ -579,7 +579,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		A2EFA6442E256BBE0017A5B7 /* Build configuration list for PBXNativeTarget "MEROT HRSUITests" */ = {
+		A2EFA6442E256BBE0017A5B7 /* Build configuration list for PBXNativeTarget "Merot InternalUITests" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				A2EFA6452E256BBE0017A5B7 /* Debug */,
