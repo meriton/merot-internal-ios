@@ -473,11 +473,95 @@ struct EmployeeDashPaystub: Codable {
 }
 
 struct EmployeePayrollView: View {
+    @State private var records: [EmpPayrollRecord] = []
+    @State private var isLoading = true
+    @State private var error: String?
+
     var body: some View {
         NavigationStack {
-            PayrollListView()
+            List {
+                if let error {
+                    ErrorBanner(message: error).listRowBackground(Color.clear)
+                }
+                if records.isEmpty && !isLoading {
+                    EmptyStateView(icon: "banknote", title: "No payroll records").listRowBackground(Color.clear)
+                }
+                ForEach(records) { r in
+                    VStack(alignment: .leading, spacing: 6) {
+                        HStack {
+                            Text(r.period_label ?? r.period ?? "Payroll")
+                                .font(.subheadline).bold().foregroundColor(.white)
+                            Spacer()
+                            Text(r.currency ?? "MKD")
+                                .font(.caption2).foregroundColor(.white.opacity(0.3))
+                        }
+                        HStack {
+                            VStack(alignment: .leading, spacing: 2) {
+                                Text("Net").font(.caption2).foregroundColor(.white.opacity(0.4))
+                                Text(formatMoney(r.net_pay)).font(.headline).foregroundColor(.accent)
+                            }
+                            Spacer()
+                            VStack(alignment: .trailing, spacing: 2) {
+                                Text("Gross").font(.caption2).foregroundColor(.white.opacity(0.4))
+                                Text(formatMoney(r.gross_pay)).font(.subheadline).foregroundColor(.white.opacity(0.7))
+                            }
+                        }
+                        if r.overtime_hours ?? 0 > 0 {
+                            Text("OT: \(String(format: "%.1f", r.overtime_hours ?? 0))h")
+                                .font(.caption2).foregroundColor(.white.opacity(0.3))
+                        }
+                    }
+                    .padding(.vertical, 4)
+                    .listRowBackground(Color.white.opacity(0.06))
+                }
+            }
+            .listStyle(.plain)
+            .scrollContentBackground(.hidden)
+            .background(Color.brand.ignoresSafeArea())
+            .navigationTitle("Payroll")
+            .brandNavBar()
+            .refreshable { await load() }
+            .task { await load() }
         }
     }
+
+    private func load() async {
+        isLoading = true
+        error = nil
+        do {
+            let res: EmpPayrollResponse = try await APIService.shared.request("GET", "/employees/payroll_records", query: ["per_page": "50"])
+            records = res.data?.payroll_records ?? []
+        } catch {
+            self.error = "Failed to load payroll"
+            #if DEBUG
+            print("[EmpPayroll] \(error)")
+            #endif
+        }
+        isLoading = false
+    }
+}
+
+struct EmpPayrollRecord: Codable, Identifiable {
+    let id: Int
+    let employee_id: String?
+    let gross_pay: Double?
+    let net_pay: Double?
+    let base_salary: Double?
+    let overtime_hours: Double?
+    let overtime_pay: Double?
+    let currency: String?
+    let period: String?
+    let period_label: String?
+    let created_at: String?
+}
+
+struct EmpPayrollResponse: Codable {
+    let data: EmpPayrollData?
+    let success: Bool?
+}
+
+struct EmpPayrollData: Codable {
+    let payroll_records: [EmpPayrollRecord]
 }
 
 struct EmployeeTimeTrackingView: View {
@@ -535,11 +619,87 @@ struct EmployeeTimeTrackingView: View {
 }
 
 struct EmployeeTimeOffView: View {
+    @State private var requests: [EmpTimeOffReq] = []
+    @State private var isLoading = true
+    @State private var error: String?
+
     var body: some View {
         NavigationStack {
-            TimeOffRequestsView()
+            List {
+                if let error {
+                    ErrorBanner(message: error).listRowBackground(Color.clear)
+                }
+                if requests.isEmpty && !isLoading {
+                    EmptyStateView(icon: "calendar.badge.clock", title: "No time off requests").listRowBackground(Color.clear)
+                }
+                ForEach(requests) { r in
+                    HStack {
+                        VStack(alignment: .leading, spacing: 4) {
+                            Text(r.time_off_record?.name ?? "Time Off")
+                                .font(.subheadline).foregroundColor(.white)
+                            Text("\(r.start_date?.prefix(10) ?? "") - \(r.end_date?.prefix(10) ?? "")")
+                                .font(.caption2).foregroundColor(.white.opacity(0.4))
+                        }
+                        Spacer()
+                        VStack(alignment: .trailing, spacing: 4) {
+                            StatusBadge(status: r.approval_status ?? "pending")
+                            Text("\(r.days ?? 0) days")
+                                .font(.caption2).foregroundColor(.accent)
+                        }
+                    }
+                    .padding(.vertical, 4)
+                    .listRowBackground(Color.white.opacity(0.06))
+                }
+            }
+            .listStyle(.plain)
+            .scrollContentBackground(.hidden)
+            .background(Color.brand.ignoresSafeArea())
+            .navigationTitle("Time Off")
+            .brandNavBar()
+            .refreshable { await load() }
+            .task { await load() }
         }
     }
+
+    private func load() async {
+        isLoading = true
+        error = nil
+        do {
+            let res: EmpTimeOffResponse = try await APIService.shared.request("GET", "/employees/time_off_requests")
+            requests = res.data?.time_off_requests ?? []
+        } catch {
+            self.error = "Failed to load time off"
+            #if DEBUG
+            print("[EmpTimeOff] \(error)")
+            #endif
+        }
+        isLoading = false
+    }
+}
+
+struct EmpTimeOffReq: Codable, Identifiable {
+    let id: Int
+    let start_date: String?
+    let end_date: String?
+    let days: Int?
+    let approval_status: String?
+    let time_off_record: EmpTimeOffRecord?
+    let created_at: String?
+}
+
+struct EmpTimeOffRecord: Codable {
+    let id: Int?
+    let name: String?
+    let leave_type: String?
+}
+
+struct EmpTimeOffResponse: Codable {
+    let data: EmpTimeOffData?
+    let success: Bool?
+}
+
+struct EmpTimeOffData: Codable {
+    let time_off_requests: [EmpTimeOffReq]
 }
 
 struct EmployeeProfileView: View {
