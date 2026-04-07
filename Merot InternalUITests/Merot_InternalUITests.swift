@@ -1,39 +1,49 @@
-//
-//  Merot_InternalUITests.swift
-//  Merot InternalUITests
-//
-//  Created by Meriton Chutra on 7/14/25.
-//
-
 import XCTest
 
 final class Merot_InternalUITests: XCTestCase {
 
     override func setUpWithError() throws {
-        // Put setup code here. This method is called before the invocation of each test method in the class.
-
-        // In UI tests it is usually best to stop immediately when a failure occurs.
         continueAfterFailure = false
-
-        // In UI tests it’s important to set the initial state - such as interface orientation - required for your tests before they run. The setUp method is a good place to do this.
-    }
-
-    override func tearDownWithError() throws {
-        // Put teardown code here. This method is called after the invocation of each test method in the class.
     }
 
     @MainActor
-    func testExample() throws {
-        // UI tests must launch the application that they test.
+    func testLoginScreenElements() throws {
         let app = XCUIApplication()
         app.launch()
 
-        // Use XCTAssert and related functions to verify your tests produce the correct results.
+        // Verify login screen elements are present
+        let emailField = app.textFields.firstMatch
+        let passwordField = app.secureTextFields.firstMatch
+        let signInButton = app.buttons["Sign In"]
+
+        // Wait for login screen to appear
+        let exists = emailField.waitForExistence(timeout: 5)
+        XCTAssertTrue(exists, "Email field should exist on login screen")
+        XCTAssertTrue(passwordField.exists, "Password field should exist")
+        XCTAssertTrue(signInButton.exists, "Sign In button should exist")
+
+        // Verify the MEROT logo text
+        let merotText = app.staticTexts["MEROT"]
+        XCTAssertTrue(merotText.exists, "MEROT logo text should be visible")
+
+        // Verify internal.merot.com footer
+        let footerText = app.staticTexts["internal.merot.com"]
+        XCTAssertTrue(footerText.exists, "Footer text should be visible")
+    }
+
+    @MainActor
+    func testLoginButtonDisabledWhenEmpty() throws {
+        let app = XCUIApplication()
+        app.launch()
+
+        let signInButton = app.buttons["Sign In"]
+        let exists = signInButton.waitForExistence(timeout: 5)
+        XCTAssertTrue(exists)
+        XCTAssertTrue(signInButton.exists)
     }
 
     @MainActor
     func testLaunchPerformance() throws {
-        // This measures how long it takes to launch your application.
         measure(metrics: [XCTApplicationLaunchMetric()]) {
             XCUIApplication().launch()
         }

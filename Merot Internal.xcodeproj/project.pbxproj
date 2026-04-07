@@ -24,7 +24,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
-		A2EFA61C2E256BBC0017A5B7 /* Merot HRS.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Merot HRS.app"; sourceTree = BUILT_PRODUCTS_DIR; };
+		A2EFA61C2E256BBC0017A5B7 /* Merot Internal.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Merot Internal.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		A2EFA62A2E256BBD0017A5B7 /* Merot InternalTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "Merot InternalTests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
 		A2EFA6342E256BBE0017A5B7 /* Merot InternalUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "Merot InternalUITests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
@@ -85,7 +85,7 @@
 		A2EFA61D2E256BBC0017A5B7 /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				A2EFA61C2E256BBC0017A5B7 /* Merot HRS.app */,
+				A2EFA61C2E256BBC0017A5B7 /* Merot Internal.app */,
 				A2EFA62A2E256BBD0017A5B7 /* Merot InternalTests.xctest */,
 				A2EFA6342E256BBE0017A5B7 /* Merot InternalUITests.xctest */,
 			);
@@ -114,7 +114,7 @@
 			packageProductDependencies = (
 			);
 			productName = "Merot Internal";
-			productReference = A2EFA61C2E256BBC0017A5B7 /* Merot HRS.app */;
+			productReference = A2EFA61C2E256BBC0017A5B7 /* Merot Internal.app */;
 			productType = "com.apple.product-type.application";
 		};
 		A2EFA6292E256BBD0017A5B7 /* Merot InternalTests */ = {
@@ -409,7 +409,7 @@
 				LD_RUNPATH_SEARCH_PATHS = "@executable_path/Frameworks";
 				"LD_RUNPATH_SEARCH_PATHS[sdk=macosx*]" = "@executable_path/../Frameworks";
 				MACOSX_DEPLOYMENT_TARGET = 15.5;
-				MARKETING_VERSION = 1.0.11;
+				MARKETING_VERSION = 1.3;
 				PRODUCT_BUNDLE_IDENTIFIER = "merot.Merot-HRS-iospu";
 				PRODUCT_NAME = "Merot Internal";
 				REGISTER_APP_GROUPS = YES;
@@ -449,7 +449,7 @@
 				LD_RUNPATH_SEARCH_PATHS = "@executable_path/Frameworks";
 				"LD_RUNPATH_SEARCH_PATHS[sdk=macosx*]" = "@executable_path/../Frameworks";
 				MACOSX_DEPLOYMENT_TARGET = 15.5;
-				MARKETING_VERSION = 1.0.11;
+				MARKETING_VERSION = 1.3;
 				PRODUCT_BUNDLE_IDENTIFIER = "merot.Merot-HRS-iospu";
 				PRODUCT_NAME = "Merot Internal";
 				REGISTER_APP_GROUPS = YES;
