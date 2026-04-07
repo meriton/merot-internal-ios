@@ -158,7 +158,7 @@ struct AdminMoreView: View {
                         Label("Employee Agreements", systemImage: "doc.text.fill").foregroundColor(.white)
                     }
                     NavigationLink { ServiceAgreementsListView() } label: {
-                        Label("Service Agreements", systemImage: "handshake.fill").foregroundColor(.white)
+                        Label("Service Agreements", systemImage: "signature").foregroundColor(.white)
                     }
                 }
                 .listRowBackground(Color.white.opacity(0.08))

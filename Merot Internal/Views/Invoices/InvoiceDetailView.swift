@@ -4,6 +4,8 @@ struct InvoiceDetailView: View {
     let invoiceId: Int
     @StateObject private var vm = InvoiceDetailViewModel()
     @State private var showRecordPayment = false
+    @State private var pdfURL: URL?
+    @State private var showShareSheet = false
 
     var body: some View {
         ScrollView {
@@ -151,6 +153,11 @@ struct InvoiceDetailView: View {
         .brandNavBar()
         .refreshable { await vm.load(id: invoiceId) }
         .sheet(isPresented: $showRecordPayment) { recordPaymentSheet }
+        .sheet(isPresented: $showShareSheet) {
+            if let url = pdfURL {
+                ShareSheet(items: [url])
+            }
+        }
         .task { await vm.load(id: invoiceId) }
     }
 
@@ -159,10 +166,20 @@ struct InvoiceDetailView: View {
     @ViewBuilder
     private func actionsSection(_ inv: Invoice) -> some View {
         let status = inv.status ?? ""
-        if status == "draft" || status == "approved" || status == "sent" {
-            CardView {
-                VStack(spacing: 10) {
-                    Text("Actions").font(.headline).foregroundColor(.white.opacity(0.7)).frame(maxWidth: .infinity, alignment: .leading)
+        CardView {
+            VStack(spacing: 10) {
+                Text("Actions").font(.headline).foregroundColor(.white.opacity(0.7)).frame(maxWidth: .infinity, alignment: .leading)
+
+                actionButton("Download PDF", icon: "arrow.down.doc.fill", color: .indigo) {
+                    Task {
+                        if let url = await vm.downloadPDF(id: invoiceId) {
+                            pdfURL = url
+                            showShareSheet = true
+                        }
+                    }
+                }
+
+                if status == "draft" || status == "approved" || status == "sent" {
 
                     if status == "draft" {
                         actionButton("Approve", icon: "checkmark.circle.fill", color: .green) {
@@ -305,4 +322,12 @@ struct RecordPaymentSheet: View {
             }
         }
     }
+}
+
+struct ShareSheet: UIViewControllerRepresentable {
+    let items: [Any]
+    func makeUIViewController(context: Context) -> UIActivityViewController {
+        UIActivityViewController(activityItems: items, applicationActivities: nil)
+    }
+    func updateUIViewController(_ uiViewController: UIActivityViewController, context: Context) {}
 }

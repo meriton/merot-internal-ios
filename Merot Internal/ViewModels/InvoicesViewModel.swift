@@ -102,6 +102,19 @@ class InvoiceDetailViewModel: ObservableObject {
         isActioning = false
     }
 
+    func downloadPDF(id: Int) async -> URL? {
+        do {
+            let data = try await api.requestData("GET", "/admin/invoices/\(id)/pdf")
+            let tmpDir = FileManager.default.temporaryDirectory
+            let fileURL = tmpDir.appendingPathComponent("invoice_\(id).pdf")
+            try data.write(to: fileURL)
+            return fileURL
+        } catch {
+            self.error = "Failed to download PDF"
+            return nil
+        }
+    }
+
     private func performAction(_ action: String, id: Int) async {
         isActioning = true
         error = nil

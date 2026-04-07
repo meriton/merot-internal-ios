@@ -33,24 +33,29 @@ struct JobPostingsListContent: View {
                 .padding(.vertical, 8)
             }
 
-            ScrollView {
+            List {
                 if let error = vm.error {
                     ErrorBanner(message: error)
+                        .listRowBackground(Color.clear)
+                        .listRowInsets(EdgeInsets())
                 }
 
                 if vm.postings.isEmpty && !vm.isLoading {
                     EmptyStateView(icon: "briefcase", title: "No job postings")
+                        .listRowBackground(Color.clear)
                 } else {
-                    LazyVStack(spacing: 8) {
-                        ForEach(vm.postings) { posting in
-                            NavigationLink(destination: JobPostingDetailView(postingId: posting.id)) {
-                                postingRow(posting)
-                            }
+                    ForEach(vm.postings) { posting in
+                        NavigationLink(destination: JobPostingDetailView(postingId: posting.id)) {
+                            postingRow(posting)
                         }
+                        .listRowBackground(Color.clear)
+                        .listRowInsets(EdgeInsets(top: 4, leading: 16, bottom: 4, trailing: 16))
                     }
-                    .padding(.horizontal)
                 }
             }
+            .listStyle(.plain)
+            .scrollContentBackground(.hidden)
+            .refreshable { await vm.load() }
         }
         .task { await vm.load() }
     }

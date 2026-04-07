@@ -31,23 +31,28 @@ struct JobApplicationsListContent: View {
                 .padding(.vertical, 8)
             }
 
-            ScrollView {
+            List {
                 if let error = vm.error {
                     ErrorBanner(message: error)
+                        .listRowBackground(Color.clear)
+                        .listRowInsets(EdgeInsets())
                 }
                 if vm.applications.isEmpty && !vm.isLoading {
                     EmptyStateView(icon: "person.crop.rectangle.stack", title: "No applications")
+                        .listRowBackground(Color.clear)
                 } else {
-                    LazyVStack(spacing: 8) {
-                        ForEach(vm.applications) { app in
-                            NavigationLink(destination: JobApplicationDetailView(applicationId: app.id)) {
-                                appRow(app)
-                            }
+                    ForEach(vm.applications) { app in
+                        NavigationLink(destination: JobApplicationDetailView(applicationId: app.id)) {
+                            appRow(app)
                         }
+                        .listRowBackground(Color.clear)
+                        .listRowInsets(EdgeInsets(top: 4, leading: 16, bottom: 4, trailing: 16))
                     }
-                    .padding(.horizontal)
                 }
             }
+            .listStyle(.plain)
+            .scrollContentBackground(.hidden)
+            .refreshable { await vm.load() }
         }
         .task { await vm.load() }
     }
