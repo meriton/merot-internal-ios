@@ -92,7 +92,7 @@ struct EmployeeTimeOffView: View {
                 return
             }
             do {
-                let _: APIResponse<String> = try await APIService.shared.request("DELETE", "/employees/time_off_requests/\(request.id)")
+                let _: SimpleResponse = try await APIService.shared.request("DELETE", "/employees/time_off_requests/\(request.id)")
                 requests.remove(at: index)
             } catch {
                 deleteError = "Failed to delete request"
@@ -317,7 +317,7 @@ struct CreateTimeOffRequestSheet: View {
         ]
 
         do {
-            let _: APIResponse<String> = try await APIService.shared.request("POST", "/employees/time_off_requests", body: body)
+            let _: SimpleResponse = try await APIService.shared.request("POST", "/employees/time_off_requests", body: body)
             success = true
             try? await Task.sleep(nanoseconds: 1_000_000_000)
             onCreated()

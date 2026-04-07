@@ -142,7 +142,7 @@ struct EmployeeTimeTrackingView: View {
     private func toggleClock() async {
         isLoading = true
         let endpoint = isClockedIn ? "/employees/clock_out" : "/employees/clock_in"
-        let _: APIResponse<String>? = try? await APIService.shared.request("POST", endpoint)
+        let _: SimpleResponse? = try? await APIService.shared.request("POST", endpoint)
         isClockedIn.toggle()
         isLoading = false
         await loadHistory()

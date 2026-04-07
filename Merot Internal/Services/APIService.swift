@@ -31,6 +31,13 @@ struct APIResponse<T: Codable>: Codable {
     let errors: [String]?
 }
 
+// Simple response that ignores the data field shape — use for POST/PUT/DELETE where you don't need the response data
+struct SimpleResponse: Codable {
+    let success: Bool?
+    let message: String?
+    let errors: [String]?
+}
+
 struct PaginatedResponse<T: Codable>: Codable {
     let data: T?
     let success: Bool?

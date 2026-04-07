@@ -93,7 +93,7 @@ class EmployeeDetailViewModel: ObservableObject {
         isActioning = true
         error = nil
         do {
-            let res: APIResponse<String> = try await api.request("POST", "/admin/employees/\(id)/send_welcome_email")
+            let res: SimpleResponse = try await api.request("POST", "/admin/employees/\(id)/send_welcome_email")
             successMessage = res.message ?? "Welcome email sent"
         } catch let err as APIError {
             error = err.errorDescription

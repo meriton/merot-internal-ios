@@ -169,7 +169,7 @@ struct EmployerTimeOffView: View {
         actionError = nil
         actionSuccess = nil
         do {
-            let _: APIResponse<String> = try await APIService.shared.request("POST", "/employers/time_off_requests/\(id)/approve")
+            let _: SimpleResponse = try await APIService.shared.request("POST", "/employers/time_off_requests/\(id)/approve")
             actionSuccess = "Request approved"
             await loadRequests()
         } catch {
@@ -184,7 +184,7 @@ struct EmployerTimeOffView: View {
         actionError = nil
         actionSuccess = nil
         do {
-            let _: APIResponse<String> = try await APIService.shared.request("POST", "/employers/time_off_requests/\(id)/deny")
+            let _: SimpleResponse = try await APIService.shared.request("POST", "/employers/time_off_requests/\(id)/deny")
             actionSuccess = "Request denied"
             await loadRequests()
         } catch {

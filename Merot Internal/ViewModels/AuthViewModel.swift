@@ -62,7 +62,7 @@ class AuthViewModel: ObservableObject {
 
     func logout() {
         Task {
-            let _: APIResponse<String>? = try? await api.request("POST", "/auth/logout")
+            let _: SimpleResponse? = try? await api.request("POST", "/auth/logout")
         }
         api.clearTokens()
         user = nil
