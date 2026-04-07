@@ -176,8 +176,14 @@ class APIService {
         if let t = accessToken { req.setValue("Bearer \(t)", forHTTPHeaderField: "Authorization") }
 
         let (data, response) = try await URLSession.shared.data(for: req)
-        guard let http = response as? HTTPURLResponse, (200...299).contains(http.statusCode) else {
-            throw APIError.serverError("Download failed")
+        guard let http = response as? HTTPURLResponse else { throw APIError.networkError }
+        guard (200...299).contains(http.statusCode) else {
+            // Try to parse error message from JSON response
+            if let json = try? JSONSerialization.jsonObject(with: data) as? [String: Any],
+               let message = json["message"] as? String {
+                throw APIError.serverError(message)
+            }
+            throw APIError.serverError("Download failed (\(http.statusCode))")
         }
         return data
     }
