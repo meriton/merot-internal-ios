@@ -3,6 +3,9 @@ import SwiftUI
 struct TimeOffRequestsView: View {
     @StateObject private var vm = TimeOffViewModel()
     @State private var confirmAction: (id: Int, action: String)?
+    @State private var showCreateForm = false
+    @State private var editingRequest: TimeOffRequest?
+    @State private var deleteConfirmId: Int?
 
     var body: some View {
         VStack(spacing: 0) {
@@ -44,6 +47,33 @@ struct TimeOffRequestsView: View {
         .navigationTitle("Time Off Requests")
         .brandNavBar()
         .refreshable { await vm.load() }
+        .toolbar {
+            ToolbarItem(placement: .navigationBarTrailing) {
+                Button { showCreateForm = true } label: {
+                    Image(systemName: "plus").foregroundColor(.white)
+                }
+            }
+        }
+        .sheet(isPresented: $showCreateForm) {
+            TimeOffFormView(existingRequest: nil) { Task { await vm.load() } }
+        }
+        .sheet(item: $editingRequest) { request in
+            TimeOffFormView(existingRequest: request) { Task { await vm.load() } }
+        }
+        .alert("Delete Request", isPresented: Binding(
+            get: { deleteConfirmId != nil },
+            set: { if !$0 { deleteConfirmId = nil } }
+        )) {
+            Button("Cancel", role: .cancel) { deleteConfirmId = nil }
+            Button("Delete", role: .destructive) {
+                if let id = deleteConfirmId {
+                    Task { await vm.delete(id: id) }
+                }
+                deleteConfirmId = nil
+            }
+        } message: {
+            Text("Are you sure you want to delete this time off request?")
+        }
         .alert("Confirm Action", isPresented: Binding(
             get: { confirmAction != nil },
             set: { if !$0 { confirmAction = nil } }
@@ -100,6 +130,36 @@ struct TimeOffRequestsView: View {
                 }
             }
             .padding(12)
+
+            // Edit/Delete row
+            Divider().background(Color.white.opacity(0.08))
+            HStack(spacing: 0) {
+                Button {
+                    editingRequest = r
+                } label: {
+                    HStack(spacing: 4) {
+                        Image(systemName: "pencil").font(.caption2)
+                        Text("Edit").font(.caption).fontWeight(.medium)
+                    }
+                    .foregroundColor(.accent)
+                    .frame(maxWidth: .infinity)
+                    .padding(.vertical, 8)
+                }
+
+                Rectangle().fill(Color.white.opacity(0.08)).frame(width: 1, height: 20)
+
+                Button {
+                    deleteConfirmId = r.id
+                } label: {
+                    HStack(spacing: 4) {
+                        Image(systemName: "trash").font(.caption2)
+                        Text("Delete").font(.caption).fontWeight(.medium)
+                    }
+                    .foregroundColor(.red.opacity(0.8))
+                    .frame(maxWidth: .infinity)
+                    .padding(.vertical, 8)
+                }
+            }
 
             // Actions for pending
             if r.approval_status == "pending" {

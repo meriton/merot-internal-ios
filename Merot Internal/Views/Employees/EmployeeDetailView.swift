@@ -3,6 +3,9 @@ import SwiftUI
 struct EmployeeDetailView: View {
     let employeeId: Int
     @StateObject private var vm = EmployeeDetailViewModel()
+    @State private var showEditForm = false
+    @State private var showShareSheet = false
+    @State private var confirmAction: String?
 
     var body: some View {
         ScrollView {
@@ -12,8 +15,18 @@ struct EmployeeDetailView: View {
                 ErrorBanner(message: error)
             } else if let detail = vm.detail {
                 VStack(spacing: 16) {
+                    if let msg = vm.successMessage {
+                        SuccessBanner(message: msg)
+                    }
+                    if let err = vm.error {
+                        ErrorBanner(message: err)
+                    }
+
                     // Header card
                     headerCard(detail.employee)
+
+                    // Actions card
+                    actionsCard(detail.employee)
 
                     // Personal info
                     personalInfoCard(detail.employee)
@@ -48,7 +61,90 @@ struct EmployeeDetailView: View {
         .navigationTitle(vm.detail?.employee.displayName ?? "Employee")
         .brandNavBar()
         .refreshable { await vm.load(id: employeeId) }
+        .toolbar {
+            ToolbarItem(placement: .navigationBarTrailing) {
+                Button { showEditForm = true } label: {
+                    Image(systemName: "pencil").foregroundColor(.white)
+                }
+                .disabled(vm.detail == nil)
+            }
+        }
+        .sheet(isPresented: $showEditForm) {
+            if let emp = vm.detail?.employee {
+                EmployeeFormView(employee: emp) { Task { await vm.load(id: employeeId) } }
+            }
+        }
+        .alert("Confirm", isPresented: Binding(
+            get: { confirmAction != nil },
+            set: { if !$0 { confirmAction = nil } }
+        )) {
+            Button("Cancel", role: .cancel) { confirmAction = nil }
+            Button("Confirm") {
+                if let action = confirmAction {
+                    Task {
+                        switch action {
+                        case "welcome_email": await vm.sendWelcomeEmail(id: employeeId)
+                        case "regenerate_id": await vm.regenerateId(id: employeeId)
+                        case "personal_info": await vm.sendPersonalInfoRequest(employeeUserId: employeeId)
+                        default: break
+                        }
+                    }
+                }
+                confirmAction = nil
+            }
+        } message: {
+            Text(confirmActionMessage)
+        }
         .task { await vm.load(id: employeeId) }
+    }
+
+    private var confirmActionMessage: String {
+        switch confirmAction {
+        case "welcome_email": return "Send welcome email to this employee?"
+        case "regenerate_id": return "Regenerate the employee ID? The old ID will no longer be valid."
+        case "personal_info": return "Send a personal info request to this employee?"
+        default: return "Are you sure?"
+        }
+    }
+
+    // MARK: - Actions
+
+    private func actionsCard(_ emp: EmployeeFullJSON) -> some View {
+        CardView {
+            VStack(spacing: 10) {
+                Text("Actions").font(.headline).foregroundColor(.white.opacity(0.7)).frame(maxWidth: .infinity, alignment: .leading)
+
+                employeeActionButton("Send Welcome Email", icon: "envelope.fill", color: .blue) {
+                    confirmAction = "welcome_email"
+                }
+                employeeActionButton("Regenerate ID", icon: "arrow.triangle.2.circlepath", color: .orange) {
+                    confirmAction = "regenerate_id"
+                }
+                employeeActionButton("Request Personal Info", icon: "person.text.rectangle", color: .purple) {
+                    confirmAction = "personal_info"
+                }
+            }
+        }
+    }
+
+    private func employeeActionButton(_ label: String, icon: String, color: Color, action: @escaping () -> Void) -> some View {
+        Button(action: action) {
+            HStack(spacing: 8) {
+                if vm.isActioning {
+                    ProgressView().tint(.white)
+                } else {
+                    Image(systemName: icon)
+                    Text(label)
+                }
+            }
+            .font(.subheadline).fontWeight(.medium)
+            .foregroundColor(.white)
+            .frame(maxWidth: .infinity)
+            .padding(.vertical, 12)
+            .background(color.opacity(0.8))
+            .cornerRadius(10)
+        }
+        .disabled(vm.isActioning)
     }
 
     // MARK: - Header

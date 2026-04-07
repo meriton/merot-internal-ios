@@ -66,3 +66,45 @@ struct ServiceAgreementsListData: Codable {
     let service_agreements: [ServiceAgreement]
     let meta: PaginationMeta?
 }
+
+// MARK: - Agreement Detail Responses
+
+struct AgreementAddendum: Codable, Identifiable {
+    let id: Int
+    let addendum_type: String?
+    let description: String?
+    let effective_date: String?
+    let status: String?
+    let created_at: String?
+}
+
+struct EmployeeAgreementDetailResponse: Codable {
+    let data: EmployeeAgreementDetailData?
+    let success: Bool?
+}
+
+struct EmployeeAgreementDetailData: Codable {
+    let employee_agreement: EmployeeAgreement?
+    let addendums: [AgreementAddendum]?
+}
+
+struct ServiceAgreementDetailResponse: Codable {
+    let data: ServiceAgreementDetailData?
+    let success: Bool?
+}
+
+struct ServiceAgreementDetailData: Codable {
+    let service_agreement: ServiceAgreement?
+    let addendums: [AgreementAddendum]?
+}
+
+struct AgreementActionResponse: Codable {
+    let data: AgreementActionData?
+    let success: Bool?
+    let message: String?
+}
+
+struct AgreementActionData: Codable {
+    let employee_agreement: EmployeeAgreement?
+    let service_agreement: ServiceAgreement?
+}

@@ -2,6 +2,7 @@ import SwiftUI
 
 struct EmployersListView: View {
     @StateObject private var vm = EmployersViewModel()
+    @State private var showCreateForm = false
 
     var body: some View {
         VStack(spacing: 0) {
@@ -42,6 +43,16 @@ struct EmployersListView: View {
         .navigationTitle("Employers")
         .brandNavBar()
         .refreshable { await vm.load() }
+        .toolbar {
+            ToolbarItem(placement: .navigationBarTrailing) {
+                Button { showCreateForm = true } label: {
+                    Image(systemName: "plus").foregroundColor(.white)
+                }
+            }
+        }
+        .sheet(isPresented: $showCreateForm) {
+            EmployerFormView(employer: nil) { Task { await vm.load() } }
+        }
         .task { await vm.load() }
     }
 
@@ -83,6 +94,7 @@ struct EmployersListView: View {
 struct EmployerDetailView: View {
     let employerId: Int
     @StateObject private var vm = EmployerDetailViewModel()
+    @State private var showEditForm = false
 
     var body: some View {
         ScrollView {
@@ -181,6 +193,19 @@ struct EmployerDetailView: View {
         .navigationTitle(vm.detail?.employer.name ?? "Employer")
         .brandNavBar()
         .refreshable { await vm.load(id: employerId) }
+        .toolbar {
+            ToolbarItem(placement: .navigationBarTrailing) {
+                Button { showEditForm = true } label: {
+                    Image(systemName: "pencil").foregroundColor(.white)
+                }
+                .disabled(vm.detail == nil)
+            }
+        }
+        .sheet(isPresented: $showEditForm) {
+            if let emp = vm.detail?.employer {
+                EmployerFormView(employer: emp) { Task { await vm.load(id: employerId) } }
+            }
+        }
         .task { await vm.load(id: employerId) }
     }
 }

@@ -104,4 +104,34 @@ class JobApplicationDetailViewModel: ObservableObject {
         }
         isActioning = false
     }
+
+    func downloadResume(id: Int) async -> URL? {
+        do {
+            let data = try await api.requestData("GET", "/admin/job_applications/\(id)/download_resume")
+            let tmpDir = FileManager.default.temporaryDirectory
+            let fileURL = tmpDir.appendingPathComponent("resume_\(id).pdf")
+            try data.write(to: fileURL)
+            return fileURL
+        } catch {
+            self.error = "Failed to download resume"
+            return nil
+        }
+    }
+
+    func addEvent(id: Int, eventType: String, notes: String?) async {
+        isActioning = true
+        error = nil
+        do {
+            var body: [String: Any] = ["event_type": eventType]
+            if let n = notes, !n.isEmpty { body["notes"] = n }
+            let res: JobApplicationActionResponse = try await api.request("POST", "/admin/job_applications/\(id)/add_event", body: body)
+            successMessage = res.message ?? "Event added"
+            await load(id: id)
+        } catch let err as APIError {
+            error = err.errorDescription
+        } catch {
+            self.error = "Failed to add event"
+        }
+        isActioning = false
+    }
 }

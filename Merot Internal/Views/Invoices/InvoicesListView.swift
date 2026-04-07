@@ -2,6 +2,7 @@ import SwiftUI
 
 struct InvoicesListView: View {
     @StateObject private var vm = InvoicesViewModel()
+    @State private var showCreateForm = false
 
     var body: some View {
         NavigationStack {
@@ -62,6 +63,16 @@ struct InvoicesListView: View {
             .navigationTitle("Invoices")
             .brandNavBar()
             .refreshable { await vm.load() }
+            .toolbar {
+                ToolbarItem(placement: .navigationBarTrailing) {
+                    Button { showCreateForm = true } label: {
+                        Image(systemName: "plus").foregroundColor(.white)
+                    }
+                }
+            }
+            .sheet(isPresented: $showCreateForm) {
+                InvoiceFormView { Task { await vm.load() } }
+            }
         }
         .task { await vm.load() }
     }

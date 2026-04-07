@@ -109,6 +109,9 @@ struct JobApplicationDetailView: View {
     @StateObject private var vm = JobApplicationDetailViewModel()
     @State private var showStatusPicker = false
     @State private var showInterviewScheduler = false
+    @State private var showAddEvent = false
+    @State private var resumeURL: URL?
+    @State private var showShareSheet = false
 
     var body: some View {
         ScrollView {
@@ -169,24 +172,27 @@ struct JobApplicationDetailView: View {
                         VStack(spacing: 10) {
                             Text("Actions").font(.headline).foregroundColor(.white.opacity(0.7)).frame(maxWidth: .infinity, alignment: .leading)
 
-                            Button { showStatusPicker = true } label: {
-                                HStack { Image(systemName: "arrow.triangle.2.circlepath"); Text("Update Status") }
-                                    .font(.subheadline).fontWeight(.medium)
-                                    .foregroundColor(.white)
-                                    .frame(maxWidth: .infinity)
-                                    .padding(.vertical, 12)
-                                    .background(Color.blue.opacity(0.8))
-                                    .cornerRadius(10)
+                            appActionButton("Update Status", icon: "arrow.triangle.2.circlepath", color: .blue) {
+                                showStatusPicker = true
                             }
 
-                            Button { showInterviewScheduler = true } label: {
-                                HStack { Image(systemName: "calendar.badge.plus"); Text("Schedule Interview") }
-                                    .font(.subheadline).fontWeight(.medium)
-                                    .foregroundColor(.white)
-                                    .frame(maxWidth: .infinity)
-                                    .padding(.vertical, 12)
-                                    .background(Color.purple.opacity(0.8))
-                                    .cornerRadius(10)
+                            appActionButton("Schedule Interview", icon: "calendar.badge.plus", color: .purple) {
+                                showInterviewScheduler = true
+                            }
+
+                            if app.has_resume == true {
+                                appActionButton("Download Resume", icon: "arrow.down.doc.fill", color: .indigo) {
+                                    Task {
+                                        if let url = await vm.downloadResume(id: applicationId) {
+                                            resumeURL = url
+                                            showShareSheet = true
+                                        }
+                                    }
+                                }
+                            }
+
+                            appActionButton("Add Note / Event", icon: "note.text.badge.plus", color: .teal) {
+                                showAddEvent = true
                             }
 
                             if app.can_be_converted == true {
@@ -266,6 +272,10 @@ struct JobApplicationDetailView: View {
         .refreshable { await vm.load(id: applicationId) }
         .sheet(isPresented: $showStatusPicker) { statusPickerSheet }
         .sheet(isPresented: $showInterviewScheduler) { interviewSchedulerSheet }
+        .sheet(isPresented: $showAddEvent) { addEventSheet }
+        .sheet(isPresented: $showShareSheet) {
+            if let url = resumeURL { ShareSheet(items: [url]) }
+        }
         .task { await vm.load(id: applicationId) }
     }
 
@@ -276,6 +286,25 @@ struct JobApplicationDetailView: View {
         case "note": return .gray
         default: return .white.opacity(0.3)
         }
+    }
+
+    private func appActionButton(_ label: String, icon: String, color: Color, action: @escaping () -> Void) -> some View {
+        Button(action: action) {
+            HStack { Image(systemName: icon); Text(label) }
+                .font(.subheadline).fontWeight(.medium)
+                .foregroundColor(.white)
+                .frame(maxWidth: .infinity)
+                .padding(.vertical, 12)
+                .background(color.opacity(0.8))
+                .cornerRadius(10)
+        }
+        .disabled(vm.isActioning)
+    }
+
+    // MARK: - Add Event Sheet
+
+    private var addEventSheet: some View {
+        AddEventSheet(applicationId: applicationId, vm: vm, isPresented: $showAddEvent)
     }
 
     // MARK: - Status Picker Sheet
@@ -319,6 +348,79 @@ struct JobApplicationDetailView: View {
 
     private var interviewSchedulerSheet: some View {
         InterviewSchedulerSheet(applicationId: applicationId, vm: vm, isPresented: $showInterviewScheduler)
+    }
+}
+
+struct AddEventSheet: View {
+    let applicationId: Int
+    @ObservedObject var vm: JobApplicationDetailViewModel
+    @Binding var isPresented: Bool
+    @State private var eventType = "note"
+    @State private var notes = ""
+
+    let eventTypes = ["note", "phone_screen", "email_sent", "reference_check", "background_check", "offer_sent", "other"]
+
+    var body: some View {
+        NavigationStack {
+            ScrollView {
+                VStack(spacing: 16) {
+                    VStack(alignment: .leading, spacing: 6) {
+                        Text("Event Type").font(.caption).foregroundColor(.white.opacity(0.5))
+                        Picker("Type", selection: $eventType) {
+                            ForEach(eventTypes, id: \.self) { t in
+                                Text(t.replacingOccurrences(of: "_", with: " ").capitalized).tag(t)
+                            }
+                        }
+                        .pickerStyle(.menu)
+                        .tint(.accent)
+                    }
+
+                    VStack(alignment: .leading, spacing: 6) {
+                        Text("Notes").font(.caption).foregroundColor(.white.opacity(0.5))
+                        TextField("Enter notes...", text: $notes, axis: .vertical)
+                            .lineLimit(3...6)
+                            .foregroundColor(.white)
+                            .padding(12)
+                            .background(Color.white.opacity(0.08))
+                            .cornerRadius(10)
+                    }
+
+                    Button {
+                        Task {
+                            await vm.addEvent(id: applicationId, eventType: eventType, notes: notes.isEmpty ? nil : notes)
+                            if vm.error == nil { isPresented = false }
+                        }
+                    } label: {
+                        HStack {
+                            if vm.isActioning { ProgressView().tint(.white) }
+                            else { Text("Add Event").fontWeight(.semibold) }
+                        }
+                        .frame(maxWidth: .infinity)
+                        .padding(.vertical, 14)
+                        .background(Color.brandGreen)
+                        .foregroundColor(.white)
+                        .cornerRadius(10)
+                    }
+                    .disabled(vm.isActioning)
+
+                    if let err = vm.error {
+                        Text(err).font(.caption).foregroundColor(.red)
+                    }
+                }
+                .padding()
+            }
+            .background(Color.brand.ignoresSafeArea())
+            .navigationTitle("Add Event")
+            .navigationBarTitleDisplayMode(.inline)
+            .toolbarBackground(Color.brand, for: .navigationBar)
+            .toolbarBackground(.visible, for: .navigationBar)
+            .toolbarColorScheme(.dark, for: .navigationBar)
+            .toolbar {
+                ToolbarItem(placement: .cancellationAction) {
+                    Button("Cancel") { isPresented = false }.foregroundColor(.white)
+                }
+            }
+        }
     }
 }
 

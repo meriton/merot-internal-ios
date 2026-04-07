@@ -40,7 +40,9 @@ struct EmployeeAgreementsListView: View {
                 } else {
                     LazyVStack(spacing: 8) {
                         ForEach(vm.agreements) { a in
-                            agreementRow(a)
+                            NavigationLink(destination: EmployeeAgreementDetailView(agreementId: a.id)) {
+                                agreementRow(a)
+                            }
                         }
                     }
                     .padding(.horizontal)

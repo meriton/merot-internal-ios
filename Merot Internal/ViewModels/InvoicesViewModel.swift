@@ -31,6 +31,23 @@ class InvoicesViewModel: ObservableObject {
         }
         isLoading = false
     }
+
+    func create(body: [String: Any]) async -> Bool {
+        isLoading = true
+        error = nil
+        do {
+            let _: InvoiceActionResponse = try await api.request("POST", "/admin/invoices", body: body)
+            actionMessage = "Invoice created"
+            await load()
+            return true
+        } catch let err as APIError {
+            error = err.errorDescription
+        } catch {
+            self.error = "Failed to create invoice"
+        }
+        isLoading = false
+        return false
+    }
 }
 
 @MainActor

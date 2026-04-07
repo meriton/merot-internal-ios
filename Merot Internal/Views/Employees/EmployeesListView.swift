@@ -2,6 +2,7 @@ import SwiftUI
 
 struct EmployeesListView: View {
     @StateObject private var vm = EmployeesViewModel()
+    @State private var showCreateForm = false
 
     var body: some View {
         NavigationStack {
@@ -56,6 +57,16 @@ struct EmployeesListView: View {
             .navigationTitle("Employees")
             .brandNavBar()
             .refreshable { await vm.load() }
+            .toolbar {
+                ToolbarItem(placement: .navigationBarTrailing) {
+                    Button { showCreateForm = true } label: {
+                        Image(systemName: "plus").foregroundColor(.white)
+                    }
+                }
+            }
+            .sheet(isPresented: $showCreateForm) {
+                EmployeeFormView(employee: nil) { Task { await vm.load() } }
+            }
         }
         .task { await vm.load() }
     }
