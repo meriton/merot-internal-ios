@@ -270,8 +270,8 @@ struct EmployeeDashboardView: View {
                                 if let emp = d.employment {
                                     Text(emp.position ?? "")
                                         .font(.caption).foregroundColor(.accent)
-                                    if let employer = emp.employer?["name"] {
-                                        Text(employer)
+                                    if let name = emp.employer?.name {
+                                        Text(name)
                                             .font(.caption2).foregroundColor(.white.opacity(0.4))
                                     }
                                 }
@@ -419,7 +419,12 @@ struct EmployeeDashEmployee: Codable {
 struct EmployeeDashEmployment: Codable {
     let id: Int?
     let position: String?
-    let employer: [String: String]?
+    let employer: EmployeeDashEmployer?
+}
+
+struct EmployeeDashEmployer: Codable {
+    let id: Int?
+    let name: String?
 }
 
 struct EmployeeDashTimeTracking: Codable {
