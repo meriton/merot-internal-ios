@@ -571,42 +571,44 @@ struct EmployeeTimeTrackingView: View {
 
     var body: some View {
         NavigationStack {
-            VStack(spacing: 24) {
-                Spacer()
-                Image(systemName: isClockedIn ? "clock.badge.checkmark.fill" : "clock.fill")
-                    .font(.system(size: 60))
-                    .foregroundColor(isClockedIn ? .brandGreen : .white.opacity(0.5))
+            ZStack {
+                Color.brand.ignoresSafeArea()
+                VStack(spacing: 24) {
+                    Spacer()
+                    Image(systemName: isClockedIn ? "clock.badge.checkmark.fill" : "clock.fill")
+                        .font(.system(size: 60))
+                        .foregroundColor(isClockedIn ? .brandGreen : .white.opacity(0.5))
 
-                Text(isClockedIn ? "Clocked In" : "Clocked Out")
-                    .font(.title2).fontWeight(.bold)
-                    .foregroundColor(.white)
+                    Text(isClockedIn ? "Clocked In" : "Clocked Out")
+                        .font(.title2).fontWeight(.bold)
+                        .foregroundColor(.white)
 
-                Button {
-                    Task {
-                        isLoading = true
-                        let endpoint = isClockedIn ? "/employees/clock_out" : "/employees/clock_in"
-                        let _: APIResponse<String>? = try? await APIService.shared.request("POST", endpoint)
-                        isClockedIn.toggle()
-                        isLoading = false
-                    }
-                } label: {
-                    Group {
-                        if isLoading {
-                            ProgressView().tint(.white)
-                        } else {
-                            Text(isClockedIn ? "Clock Out" : "Clock In")
-                                .fontWeight(.semibold)
+                    Button {
+                        Task {
+                            isLoading = true
+                            let endpoint = isClockedIn ? "/employees/clock_out" : "/employees/clock_in"
+                            let _: APIResponse<String>? = try? await APIService.shared.request("POST", endpoint)
+                            isClockedIn.toggle()
+                            isLoading = false
                         }
+                    } label: {
+                        Group {
+                            if isLoading {
+                                ProgressView().tint(.white)
+                            } else {
+                                Text(isClockedIn ? "Clock Out" : "Clock In")
+                                    .fontWeight(.semibold)
+                            }
+                        }
+                        .frame(width: 200)
+                        .padding(.vertical, 16)
+                        .background(isClockedIn ? Color.red.opacity(0.8) : Color.brandGreen)
+                        .foregroundColor(.white)
+                        .cornerRadius(12)
                     }
-                    .frame(width: 200)
-                    .padding(.vertical, 16)
-                    .background(isClockedIn ? Color.red.opacity(0.8) : Color.brandGreen)
-                    .foregroundColor(.white)
-                    .cornerRadius(12)
+                    Spacer()
                 }
-                Spacer()
             }
-            .background(Color.brand.ignoresSafeArea())
             .navigationTitle("Time Tracking")
             .brandNavBar()
             .task {
