@@ -37,11 +37,6 @@ struct LoginView: View {
 
                 LogoView(height: 60)
 
-                Text("Merot Internal")
-                    .font(.subheadline)
-                    .foregroundColor(.white.opacity(0.4))
-                    .tracking(2)
-
                 VStack(spacing: 16) {
                     if let error = auth.error {
                         Text(error)
