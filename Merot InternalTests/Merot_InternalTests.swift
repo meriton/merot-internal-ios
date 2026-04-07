@@ -80,7 +80,7 @@ final class MerotInternalTests: XCTestCase {
         XCTAssertEqual(invoice.id, 100)
         XCTAssertEqual(invoice.invoice_number, "INV-2024-001")
         XCTAssertEqual(invoice.status, "sent")
-        XCTAssertEqual(invoice.total_amount, 5000.50)
+        XCTAssertEqual(invoice.total_amount?.value, 5000.50)
         XCTAssertEqual(invoice.overdue, false)
     }
 
@@ -208,7 +208,7 @@ final class MerotInternalTests: XCTestCase {
         XCTAssertEqual(agreement.id, 20)
         XCTAssertEqual(agreement.status, "active")
         XCTAssertEqual(agreement.signature_status, "completed")
-        XCTAssertEqual(agreement.net_compensation, 1500.0)
+        XCTAssertEqual(agreement.net_compensation?.value, 1500.0)
     }
 
     func testContactRequestDecoding() throws {
@@ -253,10 +253,13 @@ final class MerotInternalTests: XCTestCase {
     // MARK: - Utility Tests
 
     func testFormatMoney() {
-        XCTAssertEqual(formatMoney(1234.56), "1,234.56")
-        XCTAssertEqual(formatMoney(0.0), "0.00")
-        XCTAssertEqual(formatMoney(nil), "-")
-        XCTAssertEqual(formatMoney(1234.56, currency: "EUR"), "1,234.56 EUR")
+        let val1: Double? = 1234.56
+        let val2: Double? = 0.0
+        let val3: Double? = nil
+        XCTAssertEqual(formatMoney(val1), "1,234.56")
+        XCTAssertEqual(formatMoney(val2), "0.00")
+        XCTAssertEqual(formatMoney(val3), "-")
+        XCTAssertEqual(formatMoney(val1, currency: "EUR"), "1,234.56 EUR")
     }
 
     func testFormatDate() {
