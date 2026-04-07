@@ -4,9 +4,11 @@ struct LogoView: View {
     var height: CGFloat = 40
 
     var body: some View {
-        Text("MEROT")
-            .font(.system(size: height * 0.5, weight: .bold, design: .default))
+        Image("MerotLogo")
+            .resizable()
+            .renderingMode(.template)
+            .aspectRatio(contentMode: .fit)
+            .frame(height: height)
             .foregroundColor(.white)
-            .tracking(4)
     }
 }
