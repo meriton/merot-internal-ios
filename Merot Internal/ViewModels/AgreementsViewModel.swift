@@ -23,7 +23,10 @@ class EmployeeAgreementsViewModel: ObservableObject {
         } catch let err as APIError {
             error = err.errorDescription
         } catch {
-            self.error = "Failed to load agreements"
+            self.error = "Failed to load agreements: \(error.localizedDescription)"
+            #if DEBUG
+            print("[EAgreementsVM] Error: \(error)")
+            #endif
         }
         isLoading = false
     }
@@ -52,7 +55,10 @@ class ServiceAgreementsViewModel: ObservableObject {
         } catch let err as APIError {
             error = err.errorDescription
         } catch {
-            self.error = "Failed to load agreements"
+            self.error = "Failed to load agreements: \(error.localizedDescription)"
+            #if DEBUG
+            print("[SAgreementsVM] Error: \(error)")
+            #endif
         }
         isLoading = false
     }

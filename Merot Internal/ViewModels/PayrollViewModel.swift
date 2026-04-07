@@ -17,7 +17,10 @@ class PayrollViewModel: ObservableObject {
         } catch let err as APIError {
             error = err.errorDescription
         } catch {
-            self.error = "Failed to load payroll"
+            self.error = "Failed to load payroll: \(error.localizedDescription)"
+            #if DEBUG
+            print("[PayrollVM] Error: \(error)")
+            #endif
         }
         isLoading = false
     }

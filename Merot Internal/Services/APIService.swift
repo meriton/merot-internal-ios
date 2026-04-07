@@ -203,7 +203,15 @@ class APIService {
         }
 
         let decoder = JSONDecoder()
-        return try decoder.decode(T.self, from: data)
+        do {
+            return try decoder.decode(T.self, from: data)
+        } catch {
+            #if DEBUG
+            print("[API] Decoding error for \(T.self): \(error)")
+            if let json = String(data: data, encoding: .utf8)?.prefix(500) { print("[API] Raw: \(json)") }
+            #endif
+            throw error
+        }
     }
 
     private func performTokenRefresh() async throws -> String? {
