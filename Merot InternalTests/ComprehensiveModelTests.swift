@@ -1241,7 +1241,7 @@ final class ComprehensiveModelTests: XCTestCase {
         let json = """
         {
             "employee": {"id": 1, "full_name": "Test User", "employee_id": "EMP-001", "department": "Engineering"},
-            "employment": {"id": 1, "position": "Developer", "employer": {"name": "Corp", "id": "1"}},
+            "employment": {"id": 1, "position": "Developer", "employer": {"name": "Corp", "id": 1}},
             "time_tracking": {"currently_clocked_in": true, "total_hours_this_week": 32.5, "total_hours_this_month": 120.0},
             "time_off": {
                 "available_days": 15.0,
