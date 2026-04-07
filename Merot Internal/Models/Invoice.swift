@@ -13,11 +13,11 @@ struct Invoice: Codable, Identifiable {
     let billing_period_display: String?
     let status: String?
     let currency: String?
-    let subtotal: Double?
-    let tax_amount: Double?
-    let late_fee: Double?
-    let discount_amount: Double?
-    let total_amount: Double?
+    let subtotal: FlexDouble?
+    let tax_amount: FlexDouble?
+    let late_fee: FlexDouble?
+    let discount_amount: FlexDouble?
+    let total_amount: FlexDouble?
     let total_employees: Int?
     let description: String?
     let notes: String?
@@ -34,18 +34,18 @@ struct InvoiceLineItem: Codable, Identifiable {
     let description: String?
     let line_item_type: String?
     let service_category: String?
-    let quantity: Double?
-    let unit_price: Double?
-    let total_price: Double?
+    let quantity: FlexDouble?
+    let unit_price: FlexDouble?
+    let total_price: FlexDouble?
     let employee_name: String?
     let employee_id: String?
-    let hours_worked: Double?
-    let hourly_rate: Double?
+    let hours_worked: FlexDouble?
+    let hourly_rate: FlexDouble?
 }
 
 struct InvoiceTransaction: Codable, Identifiable {
     let id: Int
-    let amount: Double?
+    let amount: FlexDouble?
     let payment_method: String?
     let status: String?
     let transaction_type: String?
@@ -58,12 +58,12 @@ struct InvoiceTransaction: Codable, Identifiable {
 
 struct InvoiceStats: Codable {
     let period_label: String?
-    let total_draft: Double?
-    let total_approved: Double?
-    let total_outstanding: Double?
+    let total_draft: FlexDouble?
+    let total_approved: FlexDouble?
+    let total_outstanding: FlexDouble?
     let overdue_count: Int?
-    let total_paid: Double?
-    let total_fees: Double?
+    let total_paid: FlexDouble?
+    let total_fees: FlexDouble?
 }
 
 struct InvoiceDetail: Codable {

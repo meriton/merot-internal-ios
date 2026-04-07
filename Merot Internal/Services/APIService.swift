@@ -47,7 +47,7 @@ struct PaginationMeta: Codable {
 
 // MARK: - Flexible number decoder (handles string/number)
 
-struct FlexDouble: Codable {
+struct FlexDouble: Codable, Comparable {
     let value: Double
 
     init(_ value: Double) {
@@ -66,6 +66,10 @@ struct FlexDouble: Codable {
         var container = encoder.singleValueContainer()
         try container.encode(value)
     }
+
+    static func < (lhs: FlexDouble, rhs: FlexDouble) -> Bool { lhs.value < rhs.value }
+    static func > (lhs: FlexDouble, rhs: Int) -> Bool { lhs.value > Double(rhs) }
+    static func > (lhs: FlexDouble, rhs: Double) -> Bool { lhs.value > rhs }
 }
 
 // MARK: - API Service

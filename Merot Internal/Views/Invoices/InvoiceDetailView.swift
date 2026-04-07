@@ -46,10 +46,10 @@ struct InvoiceDetailView: View {
                             }
                             InfoRow(icon: "dollarsign.circle", label: "Subtotal", value: formatMoney(inv.subtotal, currency: inv.currency))
                             InfoRow(icon: "percent", label: "Tax", value: formatMoney(inv.tax_amount, currency: inv.currency))
-                            if let lf = inv.late_fee, lf > 0 {
+                            if let lf = inv.late_fee?.value, lf > 0 {
                                 InfoRow(icon: "exclamationmark.triangle", label: "Late Fee", value: formatMoney(lf, currency: inv.currency))
                             }
-                            if let d = inv.discount_amount, d > 0 {
+                            if let d = inv.discount_amount?.value, d > 0 {
                                 InfoRow(icon: "tag.fill", label: "Discount", value: "-\(formatMoney(d, currency: inv.currency))")
                             }
                             if let terms = inv.payment_terms {
@@ -86,7 +86,7 @@ struct InvoiceDetailView: View {
                                                     .foregroundColor(.white.opacity(0.3))
                                             }
                                             Spacer()
-                                            if let qty = item.quantity, let price = item.unit_price {
+                                            if let qty = item.quantity?.value, let price = item.unit_price {
                                                 Text("\(Int(qty)) x \(formatMoney(price))")
                                                     .font(.caption2)
                                                     .foregroundColor(.white.opacity(0.4))

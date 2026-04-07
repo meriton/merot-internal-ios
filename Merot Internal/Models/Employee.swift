@@ -31,8 +31,8 @@ struct EmployeeEmployerRef: Codable {
 }
 
 struct EmployeeSalaryRef: Codable {
-    let net_salary: Double?
-    let gross_salary: Double?
+    let net_salary: FlexDouble?
+    let gross_salary: FlexDouble?
     let currency: String?
 }
 
@@ -81,15 +81,15 @@ struct EmployeeFullJSON: Codable, Identifiable {
 
 struct SalaryDetail: Codable {
     let id: Int?
-    let base_salary: Double?
-    let net_salary: Double?
-    let gross_salary: Double?
+    let base_salary: FlexDouble?
+    let net_salary: FlexDouble?
+    let gross_salary: FlexDouble?
     let currency: String?
     let bank_name: String?
     let bank_account_number: String?
     let employment_type: String?
-    let seniority: Double?
-    let merot_fee: Double?
+    let seniority: FlexDouble?
+    let merot_fee: FlexDouble?
 }
 
 struct EmploymentRecord: Codable, Identifiable {
@@ -104,8 +104,8 @@ struct EmploymentRecord: Codable, Identifiable {
 struct RecentPayrollRecord: Codable, Identifiable {
     let id: Int
     let period: String?
-    let net_salary: Double?
-    let gross_salary: Double?
+    let net_salary: FlexDouble?
+    let gross_salary: FlexDouble?
     let created_at: String?
 }
 

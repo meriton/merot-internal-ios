@@ -94,7 +94,7 @@ struct PayrollDetailView: View {
                                         .font(.caption2)
                                         .foregroundColor(.white.opacity(0.4))
                                 }
-                                if let wh = batch.working_hours {
+                                if let wh = batch.working_hours?.value {
                                     VStack {
                                         Text("\(Int(wh))")
                                             .font(.title2).bold()
@@ -196,7 +196,7 @@ struct PayrollDetailView: View {
                 // Extra details
                 LazyVGrid(columns: [GridItem(.flexible()), GridItem(.flexible())], spacing: 4) {
                     if let ot = r.overtime_hours, ot > 0 {
-                        detailItem("OT Hours", "\(Int(ot))h")
+                        detailItem("OT Hours", "\(Int(ot.value))h")
                     }
                     if let otp = r.overtime_pay, otp > 0 {
                         detailItem("OT Pay", formatMoney(otp))

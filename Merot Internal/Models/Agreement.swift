@@ -19,7 +19,7 @@ struct EmployeeAgreement: Codable, Identifiable {
     let end_date: String?
     let term_months: Int?
     let auto_renewal: Bool?
-    let net_compensation: Double?
+    let net_compensation: FlexDouble?
     let currency: String?
     let job_position: String?
     let is_trial: Bool?
@@ -39,7 +39,7 @@ struct ServiceAgreement: Codable, Identifiable {
     let effective_date: String?
     let term_months: Int?
     let auto_renewal: Bool?
-    let base_fee_per_employee: Double?
+    let base_fee_per_employee: FlexDouble?
     let payment_terms_days: Int?
     let has_signed_document: Bool?
     let addendums_count: Int?

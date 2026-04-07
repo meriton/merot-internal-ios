@@ -15,7 +15,7 @@ struct Employer: Codable, Identifiable {
 struct EmployerDetail: Codable {
     let employer: EmployerFull
     let employee_count: Int?
-    let total_invoiced: Double?
+    let total_invoiced: FlexDouble?
     let active_employments: [ActiveEmployment]?
 }
 

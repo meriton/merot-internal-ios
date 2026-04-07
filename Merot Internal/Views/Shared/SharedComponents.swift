@@ -180,6 +180,10 @@ struct SectionHeader: View {
 
 // MARK: - Money Formatter
 
+func formatMoney(_ value: FlexDouble?, currency: String? = nil) -> String {
+    return formatMoney(value?.value, currency: currency)
+}
+
 func formatMoney(_ value: Double?, currency: String? = nil) -> String {
     guard let v = value else { return "-" }
     let formatter = NumberFormatter()

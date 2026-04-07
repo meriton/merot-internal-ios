@@ -23,8 +23,8 @@ struct TimeOffRecordRef: Codable {
     let id: Int?
     let name: String?
     let leave_type: String?
-    let balance: Double?
-    let total_days: Double?
+    let balance: FlexDouble?
+    let total_days: FlexDouble?
 }
 
 struct TimeOffListResponse: Codable {

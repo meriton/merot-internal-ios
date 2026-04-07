@@ -10,8 +10,8 @@ struct JobPosting: Codable, Identifiable {
     let location: String?
     let employment_type: String?
     let experience_level: String?
-    let salary_min: Double?
-    let salary_max: Double?
+    let salary_min: FlexDouble?
+    let salary_max: FlexDouble?
     let salary_currency: String?
     let positions_available: Int?
     let positions_filled: Int?

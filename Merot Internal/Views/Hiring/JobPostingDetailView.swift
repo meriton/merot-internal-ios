@@ -42,7 +42,7 @@ struct JobPostingDetailView: View {
                             if let loc = posting.location { InfoRow(icon: "mappin.circle", label: "Location", value: loc) }
                             if let type = posting.employment_type { InfoRow(icon: "briefcase", label: "Type", value: type.replacingOccurrences(of: "_", with: " ").capitalized) }
                             if let level = posting.experience_level { InfoRow(icon: "chart.bar", label: "Level", value: level.capitalized) }
-                            if let min = posting.salary_min, let max = posting.salary_max, min > 0 {
+                            if let min = posting.salary_min?.value, let max = posting.salary_max?.value, min > 0 {
                                 InfoRow(icon: "dollarsign.circle", label: "Salary Range", value: "\(formatMoney(min)) - \(formatMoney(max)) \(posting.salary_currency ?? "")")
                             }
                             InfoRow(icon: "person.3", label: "Positions", value: "\(posting.positions_filled ?? 0)/\(posting.positions_available ?? 0)")
