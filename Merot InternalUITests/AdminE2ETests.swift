@@ -97,13 +97,14 @@ final class AdminE2ETests: UITestBase {
         app.tabBars.buttons["Invoices"].tap()
         sleep(3)
         if app.staticTexts["No invoices found"].waitForExistence(timeout: 5) { return }
-        // Try to tap an invoice — if can't find one, skip gracefully
-        if !UITestHelpers.tapFirstListRow(app: app, containingText: "INV") { return }
+        if !UITestHelpers.tapFirstListRow(app: app, containingText: "INV", timeout: 5) { return }
         let hasContent = app.staticTexts["Details"].waitForExistence(timeout: 10) ||
                          UITestHelpers.waitForText(app: app, text: "Total") ||
                          UITestHelpers.waitForText(app: app, text: "Actions")
         XCTAssertTrue(hasContent)
         UITestHelpers.tapBack(app: app)
+        // Ensure we're back on invoice list
+        app.tabBars.buttons["Invoices"].tap()
     }
 
     // MARK: - Hiring

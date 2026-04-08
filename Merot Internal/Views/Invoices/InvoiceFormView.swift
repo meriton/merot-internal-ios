@@ -13,7 +13,7 @@ struct InvoiceFormView: View {
     @State private var dueDate = Calendar.current.date(byAdding: .day, value: 30, to: Date()) ?? Date()
     @State private var billingPeriodStart = Date()
     @State private var billingPeriodEnd = Date()
-    @State private var currency = "EUR"
+    @State private var currency = "USD"
     @State private var description = ""
     @State private var notes = ""
     @State private var paymentTerms = "Net 30"
@@ -21,7 +21,7 @@ struct InvoiceFormView: View {
     @State private var isSaving = false
     @State private var error: String?
 
-    let currencies = ["EUR", "MKD", "USD"]
+    let currencies = ["USD"]
 
     struct LineItemEntry: Identifiable {
         let id = UUID()
