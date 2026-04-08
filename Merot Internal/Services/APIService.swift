@@ -90,17 +90,32 @@ class APIService {
     private let baseURL = "https://internal.merot.com/api/v2"
     #endif
 
+    private let isUITesting = CommandLine.arguments.contains("--uitesting")
+
+    // In UI test mode: memory-only tokens (no Keychain, no cross-process conflicts)
+    // In normal mode: Keychain-backed tokens (persist across launches)
+    private var _memoryAccessToken: String?
+    private var _memoryRefreshToken: String?
+
     private var accessToken: String? {
-        get { KeychainHelper.read(key: "merot_internal_access_token") }
+        get {
+            if isUITesting { return _memoryAccessToken }
+            return KeychainHelper.read(key: "merot_internal_access_token")
+        }
         set {
+            if isUITesting { _memoryAccessToken = newValue; return }
             if let v = newValue { KeychainHelper.save(key: "merot_internal_access_token", value: v) }
             else { KeychainHelper.delete(key: "merot_internal_access_token") }
         }
     }
 
     private var refreshToken: String? {
-        get { KeychainHelper.read(key: "merot_internal_refresh_token") }
+        get {
+            if isUITesting { return _memoryRefreshToken }
+            return KeychainHelper.read(key: "merot_internal_refresh_token")
+        }
         set {
+            if isUITesting { _memoryRefreshToken = newValue; return }
             if let v = newValue { KeychainHelper.save(key: "merot_internal_refresh_token", value: v) }
             else { KeychainHelper.delete(key: "merot_internal_refresh_token") }
         }

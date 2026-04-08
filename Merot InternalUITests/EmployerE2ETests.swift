@@ -7,6 +7,7 @@ final class EmployerE2ETests: XCTestCase {
     override class func setUp() {
         super.setUp()
         app = XCUIApplication()
+        app.launchArguments = ["--uitesting"]
         app.launch()
         // Employer has "Time Off" tab but no "Hiring" tab (admin has Hiring)
         // Use "Time Off" as identifier — if Hiring also exists, we're on admin, need to switch

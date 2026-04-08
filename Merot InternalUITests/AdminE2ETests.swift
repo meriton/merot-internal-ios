@@ -7,6 +7,7 @@ final class AdminE2ETests: XCTestCase {
     override class func setUp() {
         super.setUp()
         app = XCUIApplication()
+        app.launchArguments = ["--uitesting"]
         app.launch()
         // "Hiring" tab only exists on admin portal
         UITestHelpers.ensureLoggedIn(app: app, email: "meriton@merot.com", password: "password123", userType: "Admin", portalIdentifier: "Hiring")

@@ -7,6 +7,7 @@ final class LoginE2ETests: XCTestCase {
     override func setUpWithError() throws {
         continueAfterFailure = true
         app = XCUIApplication()
+        app.launchArguments = ["--uitesting"]
         app.launch()
         // Ensure we're on login screen
         if !app.buttons["Sign In"].waitForExistence(timeout: 5) {

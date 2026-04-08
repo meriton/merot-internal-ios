@@ -7,6 +7,7 @@ final class EmployeeE2ETests: XCTestCase {
     override class func setUp() {
         super.setUp()
         app = XCUIApplication()
+        app.launchArguments = ["--uitesting"]
         app.launch()
         // Employee portal has "Clock" tab (unique to employee)
         UITestHelpers.ensureLoggedIn(app: app, email: "employee@merot.com", password: "password123", userType: "Employee", portalIdentifier: "Clock")
