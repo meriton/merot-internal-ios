@@ -38,10 +38,12 @@ class AuthViewModel: ObservableObject {
     func login(email: String, password: String, userType: String = "admin") async {
         isLoading = true
         error = nil
+        let trimmedEmail = email.trimmingCharacters(in: .whitespacesAndNewlines).lowercased()
+        let trimmedPassword = password.trimmingCharacters(in: .whitespacesAndNewlines)
         do {
             let res: LoginResponse = try await api.request("POST", "/auth/login", body: [
-                "email": email,
-                "password": password,
+                "email": trimmedEmail,
+                "password": trimmedPassword,
                 "user_type": userType
             ])
             if let data = res.data {
