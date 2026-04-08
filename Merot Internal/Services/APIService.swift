@@ -171,14 +171,28 @@ class APIService {
         guard let http = response as? HTTPURLResponse else { throw APIError.networkError }
 
         if http.statusCode == 401 {
-            // Try token refresh
-            if let newAccess = try? await performTokenRefresh() {
+            // Parse server error message first
+            let serverMessage: String? = {
+                guard let json = try? JSONSerialization.jsonObject(with: data) as? [String: Any] else { return nil }
+                if let errors = json["errors"] as? [String], let first = errors.first { return first }
+                return json["message"] as? String
+            }()
+
+            // Try token refresh (only if we have a token — login attempts don't)
+            if accessToken != nil, let newAccess = try? await performTokenRefresh() {
                 accessToken = newAccess
                 req.setValue("Bearer \(newAccess)", forHTTPHeaderField: "Authorization")
                 let (retryData, retryResponse) = try await URLSession.shared.data(for: req)
                 guard let retryHttp = retryResponse as? HTTPURLResponse else { throw APIError.networkError }
-                if retryHttp.statusCode == 401 { throw APIError.unauthorized }
+                if retryHttp.statusCode == 401 {
+                    throw APIError.badRequest(serverMessage ?? "Authentication failed")
+                }
                 return try handleResponse(retryData, statusCode: retryHttp.statusCode)
+            }
+
+            // No token or refresh failed — show server message for login errors
+            if let msg = serverMessage {
+                throw APIError.badRequest(msg)
             }
             throw APIError.unauthorized
         }
