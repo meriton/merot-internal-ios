@@ -14,15 +14,11 @@ final class AdminE2ETests: UITestBase {
 
     override func tearDownWithError() throws {
         let app = AdminE2ETests.app!
-        // Dismiss any sheets/alerts
-        if app.buttons["Cancel"].exists { app.buttons["Cancel"].tap() }
-        // Pop navigation stack by tapping back repeatedly
-        for _ in 0..<3 {
-            let back = app.navigationBars.buttons.element(boundBy: 0)
-            if back.exists && back.isHittable { back.tap() }
+        // Double-tap Dashboard to pop any pushed views (SwiftUI resets nav on re-tap)
+        if app.tabBars.buttons["Dashboard"].exists {
+            app.tabBars.buttons["Dashboard"].tap()
+            app.tabBars.buttons["Dashboard"].tap()
         }
-        // Return to dashboard tab
-        if app.tabBars.buttons["Dashboard"].exists { app.tabBars.buttons["Dashboard"].tap() }
     }
 
     private var app: XCUIApplication { AdminE2ETests.app }
