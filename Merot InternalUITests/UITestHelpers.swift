@@ -1,15 +1,31 @@
 import XCTest
 
-// MARK: - Shared UI Test Helpers
-
 enum UITestHelpers {
 
-    /// Logs in as the given user type with the provided credentials.
-    /// Waits for the Dashboard tab to appear after a successful login.
+    /// Ensures the app is logged in as the given user type. If already on the correct portal, does nothing.
+    /// If on wrong portal or login screen, logs out if needed and logs in.
+    static func ensureLoggedIn(app: XCUIApplication, email: String, password: String, userType: String, portalIdentifier: String) {
+        // Check if we're already on the right portal by looking for a unique tab
+        let identifier = app.tabBars.buttons[portalIdentifier]
+        if identifier.waitForExistence(timeout: 8) {
+            app.tabBars.buttons["Dashboard"].tap()
+            return
+        }
+
+        // Either on login screen or wrong portal — logout first
+        let signIn = app.buttons["Sign In"]
+        if !signIn.waitForExistence(timeout: 3) {
+            logout(app: app)
+            sleep(2)
+        }
+
+        login(app: app, email: email, password: password, userType: userType)
+    }
+
+    /// Logs in with credentials. Assumes we're on the login screen.
     static func login(app: XCUIApplication, email: String, password: String, userType: String) {
-        // Make sure we're on the login screen
         let typeButton = app.buttons[userType]
-        guard typeButton.waitForExistence(timeout: 8) else {
+        guard typeButton.waitForExistence(timeout: 10) else {
             XCTFail("Login screen did not appear - could not find '\(userType)' button")
             return
         }
@@ -43,28 +59,42 @@ enum UITestHelpers {
                       "Dashboard tab should appear after login as \(userType)")
     }
 
-    /// Logs out from any portal. Works for Admin (More tab), Employee (More tab), and Employer (More tab).
+    /// Logs out from any portal.
     static func logout(app: XCUIApplication) {
         let moreTab = app.tabBars.buttons["More"]
         if moreTab.waitForExistence(timeout: 3) {
             moreTab.tap()
-            // Admin More has a Logout button directly in the list.
-            // Employee More has Profile -> Logout, but Logout is also directly in Admin More.
-            // Try finding the logout button, scroll if needed.
+            sleep(1)
             let logoutButton = app.buttons["Logout"]
             if logoutButton.waitForExistence(timeout: 3) {
                 logoutButton.tap()
                 return
             }
             app.swipeUp()
+            sleep(1)
             if logoutButton.waitForExistence(timeout: 3) {
                 logoutButton.tap()
-                return
             }
         }
     }
 
-    /// Waits for a staticText containing the given text to appear.
+    /// Taps the first tappable row in a SwiftUI List.
+    @discardableResult
+    static func tapFirstListRow(app: XCUIApplication, containingText: String? = nil, timeout: TimeInterval = 10) -> Bool {
+        sleep(2)
+        if let text = containingText {
+            let pred = NSPredicate(format: "label CONTAINS[c] %@", text)
+            let match = app.buttons.matching(pred).firstMatch
+            if match.waitForExistence(timeout: timeout) { match.tap(); return true }
+            let textMatch = app.staticTexts.matching(pred).firstMatch
+            if textMatch.waitForExistence(timeout: 3) { textMatch.tap(); return true }
+        }
+        let cell = app.cells.firstMatch
+        if cell.waitForExistence(timeout: 3) { cell.tap(); return true }
+        return false
+    }
+
+    /// Waits for a staticText containing the given text.
     @discardableResult
     static func waitForText(app: XCUIApplication, text: String, timeout: TimeInterval = 10) -> Bool {
         let predicate = NSPredicate(format: "label CONTAINS[c] %@", text)
@@ -72,29 +102,7 @@ enum UITestHelpers {
         return element.waitForExistence(timeout: timeout)
     }
 
-    /// Taps the first tappable row in a SwiftUI List. Tries cells, then buttons, then any tappable element containing text.
-    @discardableResult
-    static func tapFirstListRow(app: XCUIApplication, containingText: String? = nil, timeout: TimeInterval = 10) -> Bool {
-        sleep(2) // Let list load
-        // In SwiftUI, NavigationLink rows appear as buttons in accessibility
-        if let text = containingText {
-            let pred = NSPredicate(format: "label CONTAINS[c] %@", text)
-            let match = app.buttons.matching(pred).firstMatch
-            if match.waitForExistence(timeout: timeout) { match.tap(); return true }
-            // Try static texts
-            let textMatch = app.staticTexts.matching(pred).firstMatch
-            if textMatch.waitForExistence(timeout: 3) { textMatch.tap(); return true }
-        }
-        // Fallback: try cells
-        let cell = app.cells.firstMatch
-        if cell.waitForExistence(timeout: 3) { cell.tap(); return true }
-        // Fallback: first button in the list area
-        let btn = app.buttons.element(boundBy: 1) // skip back/nav buttons
-        if btn.waitForExistence(timeout: 3) && btn.isHittable { btn.tap(); return true }
-        return false
-    }
-
-    /// Navigates back using the navigation bar back button.
+    /// Navigates back.
     static func tapBack(app: XCUIApplication) {
         let backButton = app.navigationBars.buttons.element(boundBy: 0)
         if backButton.waitForExistence(timeout: 3) {
