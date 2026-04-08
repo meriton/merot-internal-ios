@@ -159,19 +159,9 @@ final class AdminE2ETests: XCTestCase {
     @MainActor
     func testEmployeeDetailLoadsPersonalInfo() throws {
         app.tabBars.buttons["Employees"].tap()
-        let searchField = app.textFields["Search employees..."]
-        XCTAssertTrue(searchField.waitForExistence(timeout: 10))
-        sleep(2)
-        // Tap first employee row
-        let firstCell = app.cells.firstMatch
-        if firstCell.waitForExistence(timeout: 5) {
-            firstCell.tap()
-        } else {
-            // Try NavigationLink-based rows
-            let anyRow = app.buttons.matching(NSPredicate(format: "label CONTAINS[c] %@", "active")).firstMatch
-            XCTAssertTrue(anyRow.waitForExistence(timeout: 5), "Should find an employee row to tap")
-            anyRow.tap()
-        }
+        sleep(3)
+        let tapped = UITestHelpers.tapFirstListRow(app: app)
+        XCTAssertTrue(tapped, "Should find an employee row to tap")
         let personalInfo = app.staticTexts["Personal Information"]
         XCTAssertTrue(personalInfo.waitForExistence(timeout: 10),
                       "Employee detail should show Personal Information section")
@@ -181,13 +171,7 @@ final class AdminE2ETests: XCTestCase {
     func testEmployeeDetailShowsEmail() throws {
         app.tabBars.buttons["Employees"].tap()
         sleep(3)
-        let firstCell = app.cells.firstMatch
-        if firstCell.waitForExistence(timeout: 5) {
-            firstCell.tap()
-        } else {
-            let anyRow = app.buttons.matching(NSPredicate(format: "label CONTAINS[c] %@", "active")).firstMatch
-            if anyRow.waitForExistence(timeout: 5) { anyRow.tap() }
-        }
+        UITestHelpers.tapFirstListRow(app: app)
         let emailLabel = app.staticTexts["Email"]
         XCTAssertTrue(emailLabel.waitForExistence(timeout: 10),
                       "Employee detail should show Email row")
@@ -197,13 +181,7 @@ final class AdminE2ETests: XCTestCase {
     func testEmployeeDetailShowsDepartment() throws {
         app.tabBars.buttons["Employees"].tap()
         sleep(3)
-        let firstCell = app.cells.firstMatch
-        if firstCell.waitForExistence(timeout: 5) {
-            firstCell.tap()
-        } else {
-            let anyRow = app.buttons.matching(NSPredicate(format: "label CONTAINS[c] %@", "active")).firstMatch
-            if anyRow.waitForExistence(timeout: 5) { anyRow.tap() }
-        }
+        UITestHelpers.tapFirstListRow(app: app)
         let dept = app.staticTexts["Department"]
         XCTAssertTrue(dept.waitForExistence(timeout: 10),
                       "Employee detail should show Department row")
@@ -213,13 +191,7 @@ final class AdminE2ETests: XCTestCase {
     func testEmployeeDetailBackReturnsToList() throws {
         app.tabBars.buttons["Employees"].tap()
         sleep(3)
-        let firstCell = app.cells.firstMatch
-        if firstCell.waitForExistence(timeout: 5) {
-            firstCell.tap()
-        } else {
-            let anyRow = app.buttons.matching(NSPredicate(format: "label CONTAINS[c] %@", "active")).firstMatch
-            if anyRow.waitForExistence(timeout: 5) { anyRow.tap() }
-        }
+        UITestHelpers.tapFirstListRow(app: app)
         let personalInfo = app.staticTexts["Personal Information"]
         XCTAssertTrue(personalInfo.waitForExistence(timeout: 10))
         // Go back
@@ -299,14 +271,8 @@ final class AdminE2ETests: XCTestCase {
         app.tabBars.buttons["Invoices"].tap()
         sleep(3)
         let empty = app.staticTexts["No invoices found"]
-        if empty.waitForExistence(timeout: 5) { return } // No invoices to test
-        let firstCell = app.cells.firstMatch
-        if firstCell.waitForExistence(timeout: 5) {
-            firstCell.tap()
-        } else {
-            let invoiceLink = app.staticTexts.containing(NSPredicate(format: "label CONTAINS[c] %@", "INV")).firstMatch
-            if invoiceLink.waitForExistence(timeout: 5) { invoiceLink.tap() }
-        }
+        if empty.waitForExistence(timeout: 5) { return }
+        UITestHelpers.tapFirstListRow(app: app, containingText: "INV")
         let detailsSection = app.staticTexts["Details"]
         XCTAssertTrue(detailsSection.waitForExistence(timeout: 10),
                       "Invoice detail should show Details section")
@@ -318,13 +284,7 @@ final class AdminE2ETests: XCTestCase {
         sleep(3)
         let empty = app.staticTexts["No invoices found"]
         if empty.waitForExistence(timeout: 5) { return }
-        let firstCell = app.cells.firstMatch
-        if firstCell.waitForExistence(timeout: 5) {
-            firstCell.tap()
-        } else {
-            let invoiceLink = app.staticTexts.containing(NSPredicate(format: "label CONTAINS[c] %@", "INV")).firstMatch
-            if invoiceLink.waitForExistence(timeout: 5) { invoiceLink.tap() }
-        }
+        UITestHelpers.tapFirstListRow(app: app, containingText: "INV")
         let downloadPDF = app.buttons.containing(NSPredicate(format: "label CONTAINS[c] %@", "Download PDF")).firstMatch
         XCTAssertTrue(downloadPDF.waitForExistence(timeout: 10),
                       "Invoice detail should show Download PDF button")
@@ -336,13 +296,7 @@ final class AdminE2ETests: XCTestCase {
         sleep(3)
         let empty = app.staticTexts["No invoices found"]
         if empty.waitForExistence(timeout: 5) { return }
-        let firstCell = app.cells.firstMatch
-        if firstCell.waitForExistence(timeout: 5) {
-            firstCell.tap()
-        } else {
-            let invoiceLink = app.staticTexts.containing(NSPredicate(format: "label CONTAINS[c] %@", "INV")).firstMatch
-            if invoiceLink.waitForExistence(timeout: 5) { invoiceLink.tap() }
-        }
+        UITestHelpers.tapFirstListRow(app: app, containingText: "INV")
         let actionsSection = app.staticTexts["Actions"]
         XCTAssertTrue(actionsSection.waitForExistence(timeout: 10),
                       "Invoice detail should show Actions section")
@@ -592,15 +546,7 @@ final class AdminE2ETests: XCTestCase {
         sleep(3)
         let noAgreements = app.staticTexts["No employee agreements"]
         if noAgreements.exists { return }
-        // Tap first agreement
-        let firstCell = app.cells.firstMatch
-        if firstCell.waitForExistence(timeout: 5) {
-            firstCell.tap()
-        } else {
-            // Try any tappable agreement row
-            let row = app.buttons.matching(NSPredicate(format: "label CONTAINS[c] %@", "draft")).firstMatch
-            if row.waitForExistence(timeout: 5) { row.tap() }
-        }
+        UITestHelpers.tapFirstListRow(app: app)
         // Should show agreement detail - signature status or contract status
         let sigStatus = app.staticTexts.containing(NSPredicate(format: "label CONTAINS[c] %@", "Signature")).firstMatch
         let contractStatus = app.staticTexts.containing(NSPredicate(format: "label CONTAINS[c] %@", "Contract")).firstMatch

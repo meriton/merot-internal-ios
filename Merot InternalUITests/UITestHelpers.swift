@@ -72,6 +72,28 @@ enum UITestHelpers {
         return element.waitForExistence(timeout: timeout)
     }
 
+    /// Taps the first tappable row in a SwiftUI List. Tries cells, then buttons, then any tappable element containing text.
+    @discardableResult
+    static func tapFirstListRow(app: XCUIApplication, containingText: String? = nil, timeout: TimeInterval = 10) -> Bool {
+        sleep(2) // Let list load
+        // In SwiftUI, NavigationLink rows appear as buttons in accessibility
+        if let text = containingText {
+            let pred = NSPredicate(format: "label CONTAINS[c] %@", text)
+            let match = app.buttons.matching(pred).firstMatch
+            if match.waitForExistence(timeout: timeout) { match.tap(); return true }
+            // Try static texts
+            let textMatch = app.staticTexts.matching(pred).firstMatch
+            if textMatch.waitForExistence(timeout: 3) { textMatch.tap(); return true }
+        }
+        // Fallback: try cells
+        let cell = app.cells.firstMatch
+        if cell.waitForExistence(timeout: 3) { cell.tap(); return true }
+        // Fallback: first button in the list area
+        let btn = app.buttons.element(boundBy: 1) // skip back/nav buttons
+        if btn.waitForExistence(timeout: 3) && btn.isHittable { btn.tap(); return true }
+        return false
+    }
+
     /// Navigates back using the navigation bar back button.
     static func tapBack(app: XCUIApplication) {
         let backButton = app.navigationBars.buttons.element(boundBy: 0)
