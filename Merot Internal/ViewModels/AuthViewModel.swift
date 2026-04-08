@@ -30,6 +30,7 @@ class AuthViewModel: ObservableObject {
         } catch {
             api.clearTokens()
             isAuthenticated = false
+            self.error = nil // Don't show error on login screen for stale sessions
         }
         isCheckingSession = false
     }
