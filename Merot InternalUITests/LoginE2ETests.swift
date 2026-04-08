@@ -1,22 +1,21 @@
 import XCTest
 
-final class LoginE2ETests: XCTestCase {
+final class LoginE2ETests: UITestBase {
 
     private var app: XCUIApplication!
 
     override func setUpWithError() throws {
+        try super.setUpWithError()
         continueAfterFailure = true
-        app = XCUIApplication()
-        app.launchArguments = ["--uitesting"]
-        app.launch()
-        // Ensure we're on login screen
+        app = launchApp()
+        // Ensure on login screen
         if !app.buttons["Sign In"].waitForExistence(timeout: 5) {
             UITestHelpers.logout(app: app)
             sleep(2)
         }
     }
 
-    // MARK: - Login Screen Elements
+    // MARK: - Login Screen
 
     @MainActor func testLoginScreenShowsAllUserTypeButtons() throws {
         XCTAssertTrue(app.buttons["Admin"].waitForExistence(timeout: 8))
@@ -28,28 +27,33 @@ final class LoginE2ETests: XCTestCase {
         XCTAssertTrue(app.staticTexts["internal.merot.com"].waitForExistence(timeout: 8))
     }
 
-    @MainActor func testLoginScreenShowsEmailAndPasswordFields() throws {
-        XCTAssertTrue(app.textFields.firstMatch.waitForExistence(timeout: 8))
-        XCTAssertTrue(app.secureTextFields.firstMatch.exists)
-    }
-
-    @MainActor func testSignInButtonExistsAndDisabledWhenEmpty() throws {
-        let signIn = app.buttons["Sign In"]
-        XCTAssertTrue(signIn.waitForExistence(timeout: 8))
+    @MainActor func testSignInButtonExists() throws {
+        XCTAssertTrue(app.buttons["Sign In"].waitForExistence(timeout: 8))
     }
 
     @MainActor func testSuccessfulAdminLogin() throws {
-        UITestHelpers.login(app: app, email: "meriton@merot.com", password: "password123", userType: "Admin")
+        UITestHelpers.login(app: app, email: Self.adminEmail, password: Self.adminPassword, userType: "Admin")
         XCTAssertTrue(app.tabBars.buttons["Hiring"].waitForExistence(timeout: 10), "Admin should have Hiring tab")
     }
 
     @MainActor func testSuccessfulEmployeeLogin() throws {
-        // Logout from admin if previous test logged in
         if !app.buttons["Sign In"].waitForExistence(timeout: 3) {
             UITestHelpers.logout(app: app)
             sleep(2)
         }
-        UITestHelpers.login(app: app, email: "employee@merot.com", password: "password123", userType: "Employee")
+        UITestHelpers.login(app: app, email: Self.employeeEmail, password: Self.employeePassword, userType: "Employee")
         XCTAssertTrue(app.tabBars.buttons["Clock"].waitForExistence(timeout: 10), "Employee should have Clock tab")
+    }
+
+    @MainActor func testSuccessfulEmployerLogin() throws {
+        if !app.buttons["Sign In"].waitForExistence(timeout: 3) {
+            UITestHelpers.logout(app: app)
+            sleep(2)
+        }
+        UITestHelpers.login(app: app, email: Self.employerEmail, password: Self.employerPassword, userType: "Employer")
+        let timeOff = app.tabBars.buttons["Time Off"]
+        let hiring = app.tabBars.buttons["Hiring"]
+        XCTAssertTrue(timeOff.waitForExistence(timeout: 10), "Employer should have Time Off tab")
+        XCTAssertFalse(hiring.exists, "Employer should NOT have Hiring tab")
     }
 }

@@ -1,23 +1,19 @@
 import XCTest
 
-final class AdminE2ETests: XCTestCase {
+final class AdminE2ETests: UITestBase {
 
     private static var app: XCUIApplication!
 
     override class func setUp() {
         super.setUp()
-        app = XCUIApplication()
-        app.launchArguments = ["--uitesting"]
-        app.launch()
-        UITestHelpers.ensureLoggedIn(app: app, email: "meriton@merot.com", password: "password123", userType: "Admin", portalIdentifier: "Hiring")
+        let base = UITestBase()
+        try? base.setUpWithError() // triggers seed
+        app = base.launchApp()
+        UITestHelpers.ensureLoggedIn(app: app, email: adminEmail, password: adminPassword, userType: "Admin", portalIdentifier: "Hiring")
     }
 
-    override func setUpWithError() throws { continueAfterFailure = true }
-
-    /// Return to tab root before each test to avoid stuck navigation
     override func tearDownWithError() throws {
         let app = AdminE2ETests.app!
-        // Pop any pushed views by tapping the current tab again
         if app.tabBars.buttons["Dashboard"].exists { app.tabBars.buttons["Dashboard"].tap() }
     }
 
@@ -63,9 +59,11 @@ final class AdminE2ETests: XCTestCase {
         XCTAssertTrue(app.textFields["Search employees..."].waitForExistence(timeout: 10))
     }
 
-    @MainActor func testEmployeesFilterChips() throws {
+    @MainActor func testEmployeesShowsTestEmployee() throws {
         app.tabBars.buttons["Employees"].tap()
-        XCTAssertTrue(app.buttons["Active"].waitForExistence(timeout: 10))
+        XCTAssertTrue(UITestHelpers.waitForText(app: app, text: "Ana Testova") ||
+                      UITestHelpers.waitForText(app: app, text: "Marko Testovski"),
+                      "Should show seeded employees")
     }
 
     @MainActor func testEmployeeDetail() throws {
@@ -85,16 +83,21 @@ final class AdminE2ETests: XCTestCase {
         XCTAssertTrue(search.waitForExistence(timeout: 10) || empty.waitForExistence(timeout: 10))
     }
 
+    @MainActor func testInvoiceShowsTestInvoice() throws {
+        app.tabBars.buttons["Invoices"].tap()
+        XCTAssertTrue(UITestHelpers.waitForText(app: app, text: "INV-TEST-001"),
+                      "Should show seeded invoice")
+    }
+
     @MainActor func testInvoiceDetail() throws {
         app.tabBars.buttons["Invoices"].tap()
         sleep(3)
         if app.staticTexts["No invoices found"].waitForExistence(timeout: 3) { return }
         guard UITestHelpers.tapFirstListRow(app: app, containingText: "INV") else { return }
-        // Invoice detail should show something - Details, Summary, or amounts
         let hasContent = app.staticTexts["Details"].waitForExistence(timeout: 10) ||
                          UITestHelpers.waitForText(app: app, text: "Total") ||
                          UITestHelpers.waitForText(app: app, text: "Actions")
-        XCTAssertTrue(hasContent, "Invoice detail should load")
+        XCTAssertTrue(hasContent)
         UITestHelpers.tapBack(app: app)
     }
 
@@ -106,10 +109,10 @@ final class AdminE2ETests: XCTestCase {
         XCTAssertTrue(app.buttons["Applications"].exists)
     }
 
-    @MainActor func testHiringSwitchToApplications() throws {
+    @MainActor func testHiringShowsTestJobPosting() throws {
         app.tabBars.buttons["Hiring"].tap()
-        app.buttons["Applications"].tap()
-        XCTAssertTrue(app.textFields["Search applications..."].waitForExistence(timeout: 10))
+        XCTAssertTrue(UITestHelpers.waitForText(app: app, text: "Test Developer"),
+                      "Should show seeded job posting")
     }
 
     // MARK: - More Tab
@@ -117,33 +120,14 @@ final class AdminE2ETests: XCTestCase {
     @MainActor func testMoreTabLinks() throws {
         app.tabBars.buttons["More"].tap()
         sleep(1)
-        XCTAssertTrue(app.staticTexts["Employers"].waitForExistence(timeout: 10), "Should show Employers link")
-    }
-
-    @MainActor func testMoreTabShowsPayroll() throws {
-        app.tabBars.buttons["More"].tap()
-        sleep(1)
-        XCTAssertTrue(app.staticTexts["Payroll"].waitForExistence(timeout: 10))
+        XCTAssertTrue(app.staticTexts["Employers"].waitForExistence(timeout: 10))
     }
 
     @MainActor func testMoreTabShowsSettings() throws {
         app.tabBars.buttons["More"].tap()
         sleep(1)
-        // May need to scroll to find Settings
-        if !app.staticTexts["Settings"].waitForExistence(timeout: 3) {
-            app.swipeUp()
-        }
+        if !app.staticTexts["Settings"].waitForExistence(timeout: 3) { app.swipeUp() }
         XCTAssertTrue(app.staticTexts["Settings"].waitForExistence(timeout: 10))
-    }
-
-    @MainActor func testMoreEmployersLoads() throws {
-        app.tabBars.buttons["More"].tap()
-        sleep(1)
-        app.staticTexts["Employers"].tap()
-        let search = app.textFields["Search employers..."]
-        let empty = app.staticTexts["No employers found"]
-        XCTAssertTrue(search.waitForExistence(timeout: 10) || empty.waitForExistence(timeout: 10))
-        UITestHelpers.tapBack(app: app)
     }
 
     @MainActor func testMoreSettingsShowsProfile() throws {

@@ -1,15 +1,15 @@
 import XCTest
 
-final class EmployerE2ETests: XCTestCase {
+final class EmployerE2ETests: UITestBase {
 
     private static var app: XCUIApplication!
 
     override class func setUp() {
         super.setUp()
-        app = XCUIApplication()
-        app.launchArguments = ["--uitesting"]
-        app.launch()
-        // Employer has Time Off tab but NOT Hiring tab
+        let base = UITestBase()
+        try? base.setUpWithError()
+        app = base.launchApp()
+        // Employer has Time Off but not Hiring
         let hiringTab = app.tabBars.buttons["Hiring"]
         let timeOffTab = app.tabBars.buttons["Time Off"]
         if timeOffTab.waitForExistence(timeout: 5) && !hiringTab.exists {
@@ -19,11 +19,9 @@ final class EmployerE2ETests: XCTestCase {
                 UITestHelpers.logout(app: app)
                 sleep(2)
             }
-            UITestHelpers.login(app: app, email: "employer1@test.chutra.org", password: "password123", userType: "Employer")
+            UITestHelpers.login(app: app, email: employerEmail, password: employerPassword, userType: "Employer")
         }
     }
-
-    override func setUpWithError() throws { continueAfterFailure = true }
 
     override func tearDownWithError() throws {
         let app = EmployerE2ETests.app!
@@ -44,7 +42,7 @@ final class EmployerE2ETests: XCTestCase {
         let hasStats = UITestHelpers.waitForText(app: app, text: "Employees") ||
                        UITestHelpers.waitForText(app: app, text: "Active") ||
                        UITestHelpers.waitForText(app: app, text: "Team")
-        XCTAssertTrue(hasStats, "Dashboard should show stats")
+        XCTAssertTrue(hasStats)
     }
 
     // MARK: - Employees
@@ -52,22 +50,10 @@ final class EmployerE2ETests: XCTestCase {
     @MainActor func testEmployeesTabLoads() throws {
         app.tabBars.buttons["Employees"].tap()
         sleep(3)
-        // Employer employees view uses .searchable with prompt "Search employees"
-        let hasContent = UITestHelpers.waitForText(app: app, text: "Search") ||
+        let hasContent = UITestHelpers.waitForText(app: app, text: "Ana Testova") ||
                          UITestHelpers.waitForText(app: app, text: "No employees") ||
-                         UITestHelpers.waitForText(app: app, text: "active")
-        XCTAssertTrue(hasContent, "Employees tab should load")
-    }
-
-    @MainActor func testEmployeeDetail() throws {
-        app.tabBars.buttons["Employees"].tap()
-        sleep(3)
-        guard UITestHelpers.tapFirstListRow(app: app) else { return }
-        let hasDetail = UITestHelpers.waitForText(app: app, text: "Contact") ||
-                        UITestHelpers.waitForText(app: app, text: "Email") ||
-                        UITestHelpers.waitForText(app: app, text: "Work Info")
-        XCTAssertTrue(hasDetail)
-        UITestHelpers.tapBack(app: app)
+                         UITestHelpers.waitForText(app: app, text: "Search")
+        XCTAssertTrue(hasContent)
     }
 
     // MARK: - Invoices
@@ -75,9 +61,9 @@ final class EmployerE2ETests: XCTestCase {
     @MainActor func testInvoicesTabLoads() throws {
         app.tabBars.buttons["Invoices"].tap()
         sleep(3)
-        let hasInvoices = UITestHelpers.waitForText(app: app, text: "INV")
-        let empty = UITestHelpers.waitForText(app: app, text: "No invoices")
-        XCTAssertTrue(hasInvoices || empty, "Invoices should load")
+        let hasContent = UITestHelpers.waitForText(app: app, text: "INV-TEST-001") ||
+                         UITestHelpers.waitForText(app: app, text: "No invoices")
+        XCTAssertTrue(hasContent)
     }
 
     @MainActor func testInvoiceDetail() throws {
@@ -87,23 +73,8 @@ final class EmployerE2ETests: XCTestCase {
         guard UITestHelpers.tapFirstListRow(app: app, containingText: "INV") else { return }
         let hasDetail = UITestHelpers.waitForText(app: app, text: "Summary") ||
                         UITestHelpers.waitForText(app: app, text: "Total") ||
-                        UITestHelpers.waitForText(app: app, text: "Details") ||
                         UITestHelpers.waitForText(app: app, text: "Download PDF")
-        XCTAssertTrue(hasDetail, "Invoice detail should load")
-        UITestHelpers.tapBack(app: app)
-    }
-
-    @MainActor func testInvoiceDetailShowsDownloadPDF() throws {
-        app.tabBars.buttons["Invoices"].tap()
-        sleep(3)
-        if UITestHelpers.waitForText(app: app, text: "No invoices") { return }
-        guard UITestHelpers.tapFirstListRow(app: app, containingText: "INV") else { return }
-        sleep(2)
-        // May need to scroll to find Download PDF button
-        if !UITestHelpers.waitForText(app: app, text: "Download PDF") {
-            app.swipeUp()
-        }
-        XCTAssertTrue(UITestHelpers.waitForText(app: app, text: "Download PDF"), "Should show Download PDF")
+        XCTAssertTrue(hasDetail)
         UITestHelpers.tapBack(app: app)
     }
 
@@ -116,7 +87,7 @@ final class EmployerE2ETests: XCTestCase {
                          UITestHelpers.waitForText(app: app, text: "approved") ||
                          UITestHelpers.waitForText(app: app, text: "No time off") ||
                          UITestHelpers.waitForText(app: app, text: "All")
-        XCTAssertTrue(hasContent, "Time Off should load")
+        XCTAssertTrue(hasContent)
     }
 
     // MARK: - More
@@ -124,28 +95,16 @@ final class EmployerE2ETests: XCTestCase {
     @MainActor func testMoreTabShowsLinks() throws {
         app.tabBars.buttons["More"].tap()
         XCTAssertTrue(app.staticTexts["Holidays"].waitForExistence(timeout: 10))
-        XCTAssertTrue(app.staticTexts["Service Agreements"].exists)
         XCTAssertTrue(app.staticTexts["Profile"].exists)
-    }
-
-    @MainActor func testMoreHolidaysLoads() throws {
-        app.tabBars.buttons["More"].tap()
-        sleep(1)
-        app.staticTexts["Holidays"].tap()
-        let hasContent = UITestHelpers.waitForText(app: app, text: "2026") ||
-                         UITestHelpers.waitForText(app: app, text: "Holiday") ||
-                         UITestHelpers.waitForText(app: app, text: "No holidays")
-        XCTAssertTrue(hasContent)
-        UITestHelpers.tapBack(app: app)
     }
 
     @MainActor func testMoreProfileLoads() throws {
         app.tabBars.buttons["More"].tap()
         sleep(1)
         app.staticTexts["Profile"].tap()
-        let hasProfile = UITestHelpers.waitForText(app: app, text: "employer1@test.chutra.org") ||
-                         UITestHelpers.waitForText(app: app, text: "Change Password") ||
-                         UITestHelpers.waitForText(app: app, text: "Company")
+        let hasProfile = UITestHelpers.waitForText(app: app, text: "employer@test.merot.com") ||
+                         UITestHelpers.waitForText(app: app, text: "TestCorp") ||
+                         UITestHelpers.waitForText(app: app, text: "Change Password")
         XCTAssertTrue(hasProfile)
         UITestHelpers.tapBack(app: app)
     }

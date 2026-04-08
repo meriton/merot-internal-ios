@@ -85,7 +85,12 @@ class APIService {
     static let shared = APIService()
 
     #if DEBUG
-    private let baseURL = "http://localhost:3000/api/v2"
+    private let baseURL: String = {
+        if CommandLine.arguments.contains("--uitesting") {
+            return "http://localhost:3001/api/v2"  // Test server
+        }
+        return "http://localhost:3000/api/v2"  // Dev server
+    }()
     #else
     private let baseURL = "https://internal.merot.com/api/v2"
     #endif
