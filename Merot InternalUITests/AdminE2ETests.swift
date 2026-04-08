@@ -14,6 +14,14 @@ final class AdminE2ETests: UITestBase {
 
     override func tearDownWithError() throws {
         let app = AdminE2ETests.app!
+        // Dismiss any sheets/alerts
+        if app.buttons["Cancel"].exists { app.buttons["Cancel"].tap() }
+        // Pop navigation stack by tapping back repeatedly
+        for _ in 0..<3 {
+            let back = app.navigationBars.buttons.element(boundBy: 0)
+            if back.exists && back.isHittable { back.tap() }
+        }
+        // Return to dashboard tab
         if app.tabBars.buttons["Dashboard"].exists { app.tabBars.buttons["Dashboard"].tap() }
     }
 
@@ -92,8 +100,9 @@ final class AdminE2ETests: UITestBase {
     @MainActor func testInvoiceDetail() throws {
         app.tabBars.buttons["Invoices"].tap()
         sleep(3)
-        if app.staticTexts["No invoices found"].waitForExistence(timeout: 3) { return }
-        guard UITestHelpers.tapFirstListRow(app: app, containingText: "INV") else { return }
+        if app.staticTexts["No invoices found"].waitForExistence(timeout: 5) { return }
+        // Try to tap an invoice — if can't find one, skip gracefully
+        if !UITestHelpers.tapFirstListRow(app: app, containingText: "INV") { return }
         let hasContent = app.staticTexts["Details"].waitForExistence(timeout: 10) ||
                          UITestHelpers.waitForText(app: app, text: "Total") ||
                          UITestHelpers.waitForText(app: app, text: "Actions")
