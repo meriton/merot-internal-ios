@@ -5,8 +5,9 @@ final class LoginE2ETests: XCTestCase {
     private var app: XCUIApplication!
 
     override func setUpWithError() throws {
-        continueAfterFailure = false
+        continueAfterFailure = true
         app = XCUIApplication()
+        app.launchArguments = ["--uitesting"]
         app.launch()
         // Make sure we start on the login screen
         logoutIfNeeded()

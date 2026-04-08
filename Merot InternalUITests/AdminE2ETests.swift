@@ -5,8 +5,9 @@ final class AdminE2ETests: XCTestCase {
     private var app: XCUIApplication!
 
     override func setUpWithError() throws {
-        continueAfterFailure = false
+        continueAfterFailure = true
         app = XCUIApplication()
+        app.launchArguments = ["--uitesting"]
         app.launch()
         loginAsAdmin()
     }
@@ -16,15 +17,20 @@ final class AdminE2ETests: XCTestCase {
     }
 
     private func loginAsAdmin() {
-        // If already on admin dashboard, just go to Dashboard tab
-        let moreTab = app.tabBars.buttons["More"]
+        // Always ensure we're logged in as admin
+        // First check if we're already on admin portal (has Hiring tab = admin only)
         let hiringTab = app.tabBars.buttons["Hiring"]
-        if moreTab.waitForExistence(timeout: 3) && hiringTab.exists {
+        if hiringTab.waitForExistence(timeout: 5) {
             app.tabBars.buttons["Dashboard"].tap()
             return
         }
-        // Otherwise log out first if needed, then log in
-        UITestHelpers.logout(app: app)
+        // Might be on login screen or wrong portal — logout and login
+        let signIn = app.buttons["Sign In"]
+        if !signIn.waitForExistence(timeout: 3) {
+            // On some portal, logout first
+            UITestHelpers.logout(app: app)
+            sleep(2)
+        }
         UITestHelpers.login(app: app, email: "meriton@merot.com", password: "password123", userType: "Admin")
     }
 
