@@ -1,8 +1,8 @@
 import SwiftUI
 
 extension Color {
-    static let brand = Color(hex: "1e3a5f")
-    static let brandLight = Color(hex: "2d5a8e")
+    static let brand = Color(hex: "0a0a0a")
+    static let brandLight = Color(hex: "1a1a1a")
     static let accent = Color(hex: "5eead4")
     static let brandGreen = Color(hex: "2b7a5b")
     static let success = Color(hex: "16a34a")
