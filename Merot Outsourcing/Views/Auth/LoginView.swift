@@ -125,7 +125,7 @@ struct LoginView: View {
 
                 Spacer()
 
-                Text("internal.merot.com")
+                Text("api.outsourcing.merot.com")
                     .font(.caption2)
                     .foregroundColor(.white.opacity(0.2))
                     .padding(.bottom, 16)

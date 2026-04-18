@@ -1,7 +1,7 @@
 import SwiftUI
 
 @main
-struct MerotInternalApp: App {
+struct MerotOutsourcingApp: App {
     @StateObject private var auth = AuthViewModel()
 
     var body: some Scene {

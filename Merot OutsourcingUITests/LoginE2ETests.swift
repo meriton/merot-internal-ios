@@ -24,7 +24,7 @@ final class LoginE2ETests: UITestBase {
     }
 
     @MainActor func testLoginScreenShowsBranding() throws {
-        XCTAssertTrue(app.staticTexts["internal.merot.com"].waitForExistence(timeout: 8))
+        XCTAssertTrue(app.staticTexts["api.outsourcing.merot.com"].waitForExistence(timeout: 8))
     }
 
     @MainActor func testSignInButtonExists() throws {

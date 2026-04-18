@@ -1,6 +1,6 @@
 import XCTest
 
-final class Merot_InternalUITestsLaunchTests: XCTestCase {
+final class Merot_OutsourcingUITestsLaunchTests: XCTestCase {
 
     override class var runsForEachTargetApplicationUIConfiguration: Bool {
         true

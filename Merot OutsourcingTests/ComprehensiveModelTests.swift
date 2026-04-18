@@ -1,5 +1,5 @@
 import XCTest
-@testable import Merot_Internal
+@testable import Merot_Outsourcing
 
 final class ComprehensiveModelTests: XCTestCase {
 

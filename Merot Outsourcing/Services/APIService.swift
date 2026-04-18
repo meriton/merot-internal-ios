@@ -92,7 +92,7 @@ class APIService {
         return "http://localhost:3000/api/v2"  // Dev server
     }()
     #else
-    private let baseURL = "https://internal.merot.com/api/v2"
+    private let baseURL = "https://api.outsourcing.merot.com/api/v2"
     #endif
 
     private let isUITesting = CommandLine.arguments.contains("--uitesting")

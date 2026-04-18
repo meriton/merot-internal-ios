@@ -1,7 +1,7 @@
 import XCTest
-@testable import Merot_Internal
+@testable import Merot_Outsourcing
 
-final class MerotInternalTests: XCTestCase {
+final class MerotOutsourcingTests: XCTestCase {
 
     // MARK: - Model Decoding Tests
 

@@ -139,8 +139,8 @@ struct EmployerProfileView: View {
                         VStack(alignment: .leading, spacing: 8) {
                             Text("App Info").font(.headline).foregroundColor(.white.opacity(0.7))
                             InfoRow(icon: "info.circle", label: "Version", value: "2.0.0")
-                            InfoRow(icon: "globe", label: "API", value: "internal.merot.com")
-                            InfoRow(icon: "building.2", label: "Platform", value: "Merot Internal")
+                            InfoRow(icon: "globe", label: "API", value: "api.outsourcing.merot.com")
+                            InfoRow(icon: "building.2", label: "Platform", value: "Merot")
                         }
                     }
                 }
