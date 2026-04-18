@@ -4,6 +4,7 @@ extension Color {
     static let brand = Color(hex: "0a0a0a")
     static let brandLight = Color(hex: "1a1a1a")
     static let accent = Color(hex: "5eead4")
+    static let brandAccent = Color(hex: "6366f1") // matches outsourcing logo dot
     static let brandGreen = Color(hex: "2b7a5b")
     static let success = Color(hex: "16a34a")
     static let warning = Color(hex: "f59e0b")

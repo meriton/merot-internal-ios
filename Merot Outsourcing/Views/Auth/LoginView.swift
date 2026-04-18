@@ -63,7 +63,7 @@ struct LoginView: View {
                                 }
                                 .frame(maxWidth: .infinity)
                                 .padding(.vertical, 10)
-                                .background(userType == type ? Color.brandGreen : Color.clear)
+                                .background(userType == type ? Color.brandAccent : Color.clear)
                                 .foregroundColor(userType == type ? .white : .white.opacity(0.4))
                             }
                         }
@@ -111,7 +111,7 @@ struct LoginView: View {
                         }
                         .frame(maxWidth: .infinity)
                         .padding(.vertical, 14)
-                        .background(Color.brandGreen)
+                        .background(Color.brandAccent)
                         .foregroundColor(.white)
                         .cornerRadius(10)
                     }
