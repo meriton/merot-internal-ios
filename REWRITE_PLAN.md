@@ -1,4 +1,4 @@
-# Merot Internal iOS App - Rewrite Plan
+# Merot Outsourcing iOS App - Rewrite Plan
 
 ## Architecture Overview
 
@@ -10,7 +10,7 @@ Following the merot-hrs-ios patterns exactly:
 - **Navigation**: `TabView` with 5 tabs (Dashboard, Employees, Invoices, Hiring, More)
 - **Design**: Dark navy theme (#1e3a5f background), white text, teal accents (#5eead4), translucent cards
 - **State**: `@StateObject` for ViewModels, `@EnvironmentObject` for auth
-- **API**: `https://internal.merot.com/api/v2` with v2 endpoints
+- **API**: `https://api.outsourcing.merot.com/api/v2` with v2 endpoints
 
 ## Color Scheme (matching hrs-ios)
 - Primary/Background: #1e3a5f (navy)
@@ -25,7 +25,7 @@ Following the merot-hrs-ios patterns exactly:
 - Card border: white @ 0.08-0.12 opacity
 
 ## API Base
-- Production: `https://internal.merot.com/api/v2`
+- Production: `https://api.outsourcing.merot.com/api/v2`
 - Debug: `http://localhost:3000/api/v2`
 - Auth: `POST /api/v2/auth/login` with `{ email, password, user_type: "admin" }`
 - Returns: `{ data: { access_token, refresh_token, user: {...}, expires_at } }`
